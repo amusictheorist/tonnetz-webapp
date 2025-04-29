@@ -15,3 +15,31 @@ export function classifyTriad(pcs: number[]): { type: '+' | '-' | null, root: nu
 
   return { type: null, root: null };
 };
+
+export function findClosestNode(
+  x: number,
+  y: number,
+  nodes: [number, number, number][],
+  tolerance = 1e-3
+): number | null {
+  for (const [nx, ny, pc] of nodes) {
+    if (Math.abs(nx - x) < tolerance && Math.abs(ny - y) < tolerance) {
+      return pc;
+    }
+  }
+  return null;
+};
+
+export function getTriadPCs(
+  vertices: [number, number][],
+  nodes: [number, number, number][]
+): number[] | null {
+  const pcs: number[] = [];
+
+  for (const [x, y] of vertices) {
+    const pc = findClosestNode(x, y, nodes);
+    if (pc === null) return null;
+    pcs.push(pc);
+  }
+  return pcs;
+};
