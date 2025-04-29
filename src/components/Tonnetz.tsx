@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { PITCH_CLASSES, hexCenters } from "../utils/constants";
+import { PITCH_CLASSES, hexCenters, pcNodes } from "../utils/constants";
 import { getHexTriangles } from "../utils/geometry";
 
 function Tonnetz() {
@@ -50,6 +50,7 @@ function Tonnetz() {
       vertices,
     }));
   });
+  const nodes = pcNodes;
 
   const viewBoxSize = 1000;
 
@@ -87,7 +88,7 @@ function Tonnetz() {
       <div
         style={{
           width: 3000,
-          height: 3000,
+          height: 1200,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -122,6 +123,24 @@ function Tonnetz() {
               />
             );
           })}
+
+          {nodes.map(([x, y, label], idx) => (
+            <g key={`node-${idx}`} transform={`translate(${x}, ${-y})`}>
+              <circle
+                r={12.5}
+                fill="#fff"
+                stroke="#000"
+                strokeWidth={1.5}
+              />
+              <text
+                y={3}
+                textAnchor="middle"
+                fontSize={8}
+              >
+                {label}
+              </text>
+            </g>
+          ))}
         </svg>
       </div>
     </div>
