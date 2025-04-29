@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { HEX_RADIUS, PITCH_CLASSES, hexCenters } from "../utils/constants";
+import { PITCH_CLASSES, hexCenters } from "../utils/constants";
 import { getHexTriangles } from "../utils/geometry";
-import { Point, Triangle, Node } from "../types/types";
 
 function Tonnetz() {
   const [selectedTriangles, setSelectedTriangles] = useState<Set<string>>(new Set());
@@ -14,6 +13,8 @@ function Tonnetz() {
     });
   };
 
+  const isAnySelected = selectedTriangles.size > 0;
+
   const triangles = hexCenters.flatMap(([cx, cy], hexIdx) => {
     return getHexTriangles(cx, cy).map((vertices, triIdx) => ({
       id: `${hexIdx}-${triIdx}`,
@@ -21,26 +22,44 @@ function Tonnetz() {
     }));
   });
 
-  const viewBoxSize = 1000;
+  const viewBoxSize = 500;
 
   return (
-    <svg
-      viewBox={[-viewBoxSize / 2, -viewBoxSize / 2, viewBoxSize, viewBoxSize].join(" ")}
-      width="100%"
-      height="100%"
-      style={{ backgroundColor: "#fff" }}
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh"
+      }}
     >
-      {triangles.map(({ id, vertices }) => (
-        <polygon
-          key={id}
-          points={vertices.map(([x, y]) => `${x},${-y}`).join(" ")}
-          fill={selectedTriangles.has(id) ? "#88f" : "#ccc"}
-          stroke="#333"
-          onClick={() => handleTriangleClick(id)}
-        />
-      ))}
-
-    </svg>
+      <svg
+        viewBox={[-viewBoxSize / 2, -viewBoxSize / 2, viewBoxSize, viewBoxSize].join(" ")}
+        width="180vh"
+        height="100vh"
+        style={{
+          backgroundColor: "#fff",
+          border: "2px solid black"
+        }}
+      >
+        {triangles.map(({ id, vertices }) => {
+          const isSelected = selectedTriangles.has(id);
+          const opacity = selectedTriangles.size === 0 ? 1 : isSelected ? 1 : 0.3;
+          
+          return (
+            <polygon
+              key={id}
+              points={vertices.map(([x, y]) => `${x},${-y}`).join(" ")}
+              fill="#ddd"
+              stroke="#333"
+              opacity={opacity}
+              onClick={() => handleTriangleClick(id)}
+              style={{ cursor: "pointer" }}
+            />
+          );
+        })}
+      </svg>
+    </div>
   );
 };
 
