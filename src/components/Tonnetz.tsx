@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { PITCH_CLASSES, hexCenters, pcNodes } from "../utils/constants";
+import { hexCenters, pcNodes } from "../utils/constants";
 import { getHexTriangles } from "../utils/geometry";
 
 function Tonnetz() {
@@ -130,7 +130,7 @@ function Tonnetz() {
                 r={12.5}
                 fill="#fff"
                 stroke="#000"
-                strokeWidth={1.5}
+                strokeWidth={1}
               />
               <text
                 y={3}
