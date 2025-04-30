@@ -1,9 +1,14 @@
-import { useEffect, useRef, useState } from "react";
-import { hexCenters, pcNodes } from "../utils/constants";
-import { getHexTriangles } from "../utils/geometry";
+import { useEffect, useRef, useState, useMemo } from "react";
+import { buildTransformationMap, getTriangleVertices } from "../utils/geometry";
+import { TransformationMap, Transformation, Triangle } from "../types/types";
+import { cols, rows, sideLength, triangleHeight, pcNodes } from "../utils/constants";
 
 function Tonnetz() {
   const [selectedTriangles, setSelectedTriangles] = useState<Set<string>>(new Set());
+  const [transformationMap, setTransformationMap] = useState<TransformationMap | null>(null);
+  const [highlightedTransformations, setHighlightedTransformations] = useState<
+    { targetId: String, label: Transformation }[]
+  >([]);
   const [zoom, setZoom] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -14,7 +19,7 @@ function Tonnetz() {
   const handleWheel = (e: WheelEvent) => {
     if (e.ctrlKey) {
       e.preventDefault();
-      const direction = Math.sign(e.deltaY)
+      const direction = Math.sign(e.deltaY);
       setZoom(prev => {
         const newZoom = Math.min(3, Math.max(0.5, prev - direction * 0.1));
         return parseFloat(newZoom.toFixed(2));
@@ -37,20 +42,50 @@ function Tonnetz() {
   const handleTriangleClick = (id: string) => {
     setSelectedTriangles(prev => {
       const newSet = new Set(prev);
-      newSet.has(id) ? newSet.delete(id) : newSet.add(id);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+        setHighlightedTransformations([]);
+      } else {
+        newSet.add(id);
+        if (transformationMap?.[id]) {
+          const highlights = Object.entries(transformationMap[id]!).map(([label, targetId]) => ({
+            targetId,
+            label: label as Transformation
+          }));
+          setHighlightedTransformations(highlights);
+        }
+      }
       return newSet;
     });
   };
 
   const isAnySelected = selectedTriangles.size > 0;
 
-  const triangles = hexCenters.flatMap(([cx, cy], hexIdx) => {
-    return getHexTriangles(cx, cy).map((vertices, triIdx) => ({
-      id: `${hexIdx}-${triIdx}`,
-      vertices,
-    }));
-  });
-  const nodes = pcNodes;
+  const triangles = useMemo(() => {
+    const newTriangles: Triangle[] = [];
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const isUp = (row + col) % 2 === 0;
+        const x = (col - cols / 2) * (sideLength / 2);
+        const y = (rows / 2 - row) * triangleHeight;
+        const vertices = getTriangleVertices(x, y, isUp);
+        newTriangles.push({
+          id: `t-${row}-${col}`, vertices,
+          selected: false
+        });
+      }
+    }
+    return newTriangles;
+  }, []);
+
+  useEffect(() => {
+    if (triangles.length > 0) {
+      const map = buildTransformationMap(triangles);
+      setTransformationMap(map);
+    }
+  }, [triangles]);
+
+  const nodes = pcNodes; // Assuming pcNodes is imported or defined somewhere
 
   const viewBoxSize = 1000;
 
@@ -78,7 +113,7 @@ function Tonnetz() {
           position: "fixed",
           top: "100px",
           right: "100px",
-          transform: "rotate(-90deg",
+          transform: "rotate(-90deg)",
           transformOrigin: "top right",
           height: "100px",
           zIndex: 10
@@ -96,7 +131,7 @@ function Tonnetz() {
           transformOrigin: "center center"
         }}
       >
-      
+
         <svg
           viewBox={[-viewBoxSize / 2, -viewBoxSize / 2, viewBoxSize, viewBoxSize].join(" ")}
           width={3000}
@@ -121,6 +156,33 @@ function Tonnetz() {
                 onClick={() => handleTriangleClick(id)}
                 style={{ cursor: "pointer" }}
               />
+            );
+          })}
+
+          {highlightedTransformations.map(({ targetId, label }) => {
+            const tri = triangles.find(t => t.id === targetId);
+            if (!tri) return null;
+
+            const [a, b, c] = tri.vertices;
+            const [x, y] = [
+              (a[0] + b[0] + c[0]) / 3,
+              -(a[1] + b[1] + c[1]) / 3
+            ];
+
+            return (
+              <text
+                key={`label-${targetId}`}
+                x={x}
+                y={y}
+                fontSize={10}
+                fill="black"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                pointerEvents="none"
+                style={{ fontFamily: "sans-serif", opacity: 0.7 }}
+              >
+                {label}
+              </text>
             );
           })}
 

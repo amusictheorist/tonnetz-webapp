@@ -10,3 +10,10 @@ export interface Node {
   position: Point;
   label: string;
 }
+
+export type Transformation = 'P' | 'L' | 'R' | 'N' | 'S' | 'H';
+
+export type TransformationMap = Record<
+  string,
+  Partial<Record<Transformation, string>>
+>;
