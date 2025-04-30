@@ -55,6 +55,7 @@ function Tonnetz() {
           setHighlightedTransformations(highlights);
         }
       }
+      console.log('triangle id:', id);
       return newSet;
     });
   };
@@ -70,7 +71,7 @@ function Tonnetz() {
         const y = (rows / 2 - row) * triangleHeight;
         const vertices = getTriangleVertices(x, y, isUp);
         newTriangles.push({
-          id: `t-${row}-${col}`, vertices,
+          id: `${row}-${col}`, vertices,
           selected: false
         });
       }
@@ -85,7 +86,7 @@ function Tonnetz() {
     }
   }, [triangles]);
 
-  const nodes = pcNodes; // Assuming pcNodes is imported or defined somewhere
+  const nodes = pcNodes;
 
   const viewBoxSize = 1000;
 

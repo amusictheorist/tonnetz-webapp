@@ -1,5 +1,5 @@
 import { sideLength, triangleHeight } from "./constants";
-import { Point, Triangle, Transformation, TransformationMap } from "../types/types";
+import { Point, Triangle, TransformationMap } from "../types/types";
 
 export function getTriangleVertices(centerX: number, centerY: number, isUp: boolean): [Point, Point, Point] {
   const s = sideLength;
@@ -20,15 +20,6 @@ export function getTriangleVertices(centerX: number, centerY: number, isUp: bool
   }
 }
 
-function shareEdge(triA: Triangle, triB: Triangle): boolean {
-  const aVertices = triA.vertices.map(p => p.join(','));
-  const bVertices = triB.vertices.map(p => p.join(','));
-
-  const shared = aVertices.filter(p => bVertices.includes(p));
-
-  return shared.length === 2;
-}
-
 function isPointingUp(triangle: Triangle): boolean {
   const [a, b, c] = triangle.vertices;
   const centroidY = (a[1] + b[1] + c[1]) / 3;
@@ -39,29 +30,6 @@ function isPointingUp(triangle: Triangle): boolean {
   const result = centroidY > baseY;
   
   return result;
-}
-
-function edgeDirection(tri: Triangle, neighbor: Triangle): 'bottom' | 'left' | 'right' | null {
-  const [a, b, c] = tri.vertices;
-  const edges = [
-    [a, b],
-    [b, c],
-    [c, a]
-  ];
-
-  const sharedEdge = neighbor.vertices.filter(v =>
-    tri.vertices.some(tv => tv[0] === v[0] && tv[1] === v[1])
-  );
-
-  if (sharedEdge.length !== 2) return null;
-
-  const key = sharedEdge.map(p => p.join(',')).sort().join('|');
-  const edgeKeys = edges.map(([p1, p2]) => [p1, p2].map(p => p.join(',')).sort().join('|'));
-
-  const index = edgeKeys.indexOf(key);
-  if (index === -1) return null;
-
-  return ['bottom', 'left', 'right'][index] as 'bottom' | 'left' | 'right';
 }
 
 export function buildTransformationMap(triangles: Triangle[]): TransformationMap {
@@ -77,23 +45,24 @@ export function buildTransformationMap(triangles: Triangle[]): TransformationMap
       if (i === j) continue;
       
       const other = triangles[j];
-      if (!shareEdge(tri, other)) continue;
+      const [row, col] = triId.split('-').map(Number);
+      const [otherRow, otherCol] = other.id.split('-').map(Number);
 
-      const direction = edgeDirection(tri, other);
-      if (!direction) continue;
-
-      let label: Transformation;
       if (triUp) {
-        if (direction === 'bottom') label = 'P';
-        else if (direction === 'left') label = 'L';
-        else label = 'R';
+        if (otherRow === row + 1 && otherCol === col) map[triId]['P'] = other.id;
+        if (otherRow === row && otherCol === col + 1) map[triId]['L'] = other.id;
+        if (otherRow === row && otherCol === col - 1) map[triId]['R'] = other.id;
+        if (otherRow === row + 1 && otherCol === col - 2) map[triId]['N'] = other.id;
+        if (otherRow === row - 1 && otherCol === col) map[triId]['S'] = other.id;
+        if (otherRow === row - 1 && otherCol === col + 2) map[triId]['H'] = other.id;
       } else {
-        if (direction === 'bottom') label = 'L';
-        else if (direction === 'left') label = 'P';
-        else label = 'R';
+        if (otherRow === row - 1 && otherCol === col) map[triId]['P'] = other.id;
+        if (otherRow === row && otherCol === col - 1) map[triId]['L'] = other.id;
+        if (otherRow === row && otherCol === col + 1) map[triId]['R'] = other.id;
+        if (otherRow === row - 1 && otherCol === col + 2) map[triId]['N'] = other.id;
+        if (otherRow === row + 1 && otherCol === col) map[triId]['S'] = other.id;
+        if (otherRow === row + 1 && otherCol === col - 2) map[triId]['H'] = other.id;
       }
-
-      map[triId]![label] = other.id;
     }
   }
 
