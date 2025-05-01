@@ -9,6 +9,7 @@ function Tonnetz() {
   const [highlightedTransformations, setHighlightedTransformations] = useState<
     Record<string, { targetId: String, label: Transformation }[]>
     >({});
+  const [showTransformations, setShowTransformations] = useState(true);
   const [zoom, setZoom] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -107,6 +108,32 @@ function Tonnetz() {
     >
 
       <input
+        type="checkbox"
+        checked={showTransformations}
+        onChange={(e) => setShowTransformations(e.target.checked)}
+        style={{
+          position: "fixed",
+          top: "105px",
+          right: "100px",
+          zIndex: 10,
+          backgroundColor: "#fff",
+          padding: "4px"
+        }}
+      />
+      <label
+        style={{
+          position: "fixed",
+          top: "100px",
+          right: "120px",
+          zIndex: 10,
+          backgroundColor: "#fff",
+          fontSize: "14px"
+        }}
+      >
+        Show Transformations
+      </label>
+
+      <input
         type="range"
         min="0.3"
         max="1.5"
@@ -163,12 +190,12 @@ function Tonnetz() {
             );
           })}
           
-          {(() => {
+          {showTransformations && (() => {
             const renderedTargets = new Set<string>();
             const dedupedLabels: { targetId: string; label: Transformation }[] = [];
             
             for (const list of Object.values(highlightedTransformations)) {
-              for (const item of list) {
+              for (const item of list as { targetId: string;  label: Transformation }[]) {
                 if (!renderedTargets.has(item.targetId)) {
                   renderedTargets.add(item.targetId);
                   dedupedLabels.push(item);
