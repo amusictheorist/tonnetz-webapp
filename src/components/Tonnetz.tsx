@@ -7,8 +7,8 @@ function Tonnetz() {
   const [selectedTriangles, setSelectedTriangles] = useState<Set<string>>(new Set());
   const [transformationMap, setTransformationMap] = useState<TransformationMap | null>(null);
   const [highlightedTransformations, setHighlightedTransformations] = useState<
-    { targetId: String, label: Transformation }[]
-  >([]);
+    Record<string, { targetId: String, label: Transformation }[]>
+    >({});
   const [zoom, setZoom] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -42,9 +42,11 @@ function Tonnetz() {
   const handleTriangleClick = (id: string) => {
     setSelectedTriangles(prev => {
       const newSet = new Set(prev);
+      const newHighlights = { ...highlightedTransformations };
+
       if (newSet.has(id)) {
         newSet.delete(id);
-        setHighlightedTransformations([]);
+        delete newHighlights[id];
       } else {
         newSet.add(id);
         if (transformationMap?.[id]) {
@@ -52,10 +54,11 @@ function Tonnetz() {
             targetId,
             label: label as Transformation
           }));
-          setHighlightedTransformations(highlights);
+          newHighlights[id] = highlights;
         }
       }
-      console.log('triangle id:', id);
+
+      setHighlightedTransformations(newHighlights);
       return newSet;
     });
   };
@@ -159,33 +162,47 @@ function Tonnetz() {
               />
             );
           })}
-
-          {highlightedTransformations.map(({ targetId, label }) => {
-            const tri = triangles.find(t => t.id === targetId);
-            if (!tri) return null;
-
-            const [a, b, c] = tri.vertices;
-            const [x, y] = [
-              (a[0] + b[0] + c[0]) / 3,
-              -(a[1] + b[1] + c[1]) / 3
-            ];
-
-            return (
-              <text
-                key={`label-${targetId}`}
-                x={x}
-                y={y}
-                fontSize={10}
-                fill="black"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                pointerEvents="none"
-                style={{ fontFamily: "sans-serif", opacity: 0.7 }}
-              >
-                {label}
-              </text>
-            );
-          })}
+          
+          {(() => {
+            const renderedTargets = new Set<string>();
+            const dedupedLabels: { targetId: string; label: Transformation }[] = [];
+            
+            for (const list of Object.values(highlightedTransformations)) {
+              for (const item of list) {
+                if (!renderedTargets.has(item.targetId)) {
+                  renderedTargets.add(item.targetId);
+                  dedupedLabels.push(item);
+                }
+              }
+            }
+            
+            return dedupedLabels.map(({ targetId, label }, idx) => {
+              const tri = triangles.find(t => t.id === targetId);
+              if (!tri) return null;
+              
+              const [a, b, c] = tri.vertices;
+              const [x, y] = [
+                (a[0] + b[0] + c[0]) / 3,
+                -(a[1] + b[1] + c[1]) / 3
+              ];
+              
+              return (
+                <text
+                  key={`label-${targetId}-${label}-${idx}`}
+                  x={x}
+                  y={y}
+                  fontSize={10}
+                  fill="red"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  pointerEvents="none"
+                  style={{ fontFamily: "sans-serif", opacity: 0.7 }}
+                >
+                  {label}
+                </text>
+              );
+            });
+          })()}
 
           {nodes.map(([x, y, label], idx) => (
             <g key={`node-${idx}`} transform={`translate(${x}, ${-y})`}>
