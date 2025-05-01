@@ -18,6 +18,11 @@ function Tonnetz() {
   const minZoom = 1;
   const maxZoom = 3;
   const [zoom, setZoom] = useState((minZoom + maxZoom) / 2);
+  const [showModal, setShowModal] = useState(true);
+
+  useEffect(() => {
+    setShowModal(true);
+  }, []);
 
   const handleZoom = (e: React.ChangeEvent<HTMLInputElement>) => {
     setZoom(parseFloat(e.target.value));
@@ -336,7 +341,57 @@ function Tonnetz() {
           </g>
         ))}
       </svg>
-    </div>
+      </div>
+
+      {showModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#fff",
+              padding: "30px",
+              borderRadius: "10px",
+              maxWidth: "500px",
+              textAlign: "left",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
+            }}
+          >
+            <h2 style={{ marginTop: 0 }}>Welcome to the amusictheorist's Transformational Tonnetz!</h2>
+            <p>Click triads to select them and check "Show Transformations" box to view Neo-Riemannian transformations P, L, R, N, S, and H on the Tonnetz.</p>
+            <p>Hold <strong>Ctrl</strong> and scroll to zoom, or use zoom slider on the right.</p>
+            <p>Draw path mode: check box to toggle mode, then select other triads to draw a transformational path on the Tonnetz.</p>
+            <p>Diagonals moving from Southwest to Northeast represent Hexatonic Cycles, or PL chains.</p>
+            <p>Diagonals moving from Northwest to Southeast represent Octatonic Cycles, or PR chains.</p>
+            <p>Horizontal movement represents movement by ascending or falling fifths through diatonic mediants, or RL chains.</p>
+            <button
+              onClick={() => setShowModal(false)}
+              style={{
+                marginTop: "20px",
+                padding: "8px 16px",
+                border: "none",
+                borderRadius: "5px",
+                backgroundColor: "#333",
+                color: "#fff",
+                cursor: "pointer"
+              }}
+            >
+              Got it!
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
