@@ -12,8 +12,12 @@ function Tonnetz() {
   const [showTransformations, setShowTransformations] = useState(false);
   const [drawPath, setDrawPath] = useState(false);
   const [path, setPath] = useState<string[]>([]);
-  const [zoom, setZoom] = useState(1);
   const containerRef = useRef<HTMLDivElement>(null);
+  const viewBoxWidth = cols * sideLength;
+  const viewBoxHeight = rows * triangleHeight + 100;
+  const minZoom = 1;
+  const maxZoom = 3;
+  const [zoom, setZoom] = useState((minZoom + maxZoom) / 2);
 
   const handleZoom = (e: React.ChangeEvent<HTMLInputElement>) => {
     setZoom(parseFloat(e.target.value));
@@ -98,17 +102,14 @@ function Tonnetz() {
 
   const nodes = pcNodes;
 
-  const viewBoxSize = 1000;
-
   return (
     <div
       ref={containerRef}
       style={{
         width: "100vw",
         height: "100vh",
-        overflow: "auto", // Change to auto to prevent forcing scrollbars
+        overflow: "auto",
         backgroundColor: "#f8f8f8",
-        border: "2px solid black",
         position: "relative"
       }}
     >
@@ -117,7 +118,7 @@ function Tonnetz() {
         style={{
           position: "fixed",
           top: "100px",
-          right: "50px", // Adjusted to fit both elements
+          right: "20px",
           zIndex: 20,
           background: "#fff",
           padding: "4px 8px",
@@ -178,13 +179,13 @@ function Tonnetz() {
         >
           <input
             type="range"
-            min="0.3"
-            max="1.5"
+            min={minZoom}
+            max={maxZoom}
             step="0.01"
             value={zoom}
             onChange={handleZoom}
             style={{
-              width: "100px", // Adjust the width to fit the container
+              width: "100px",
               height: "10px"
             }}
           />
@@ -192,15 +193,26 @@ function Tonnetz() {
       </div>
   
       {/* grid window */}
-      <svg
-        viewBox={[-viewBoxSize / 2, -viewBoxSize / 2, viewBoxSize, viewBoxSize].join(" ")}
+      <div
         style={{
-          display: "block",
-          width: "100%", // Let the SVG take the full width of the container
-          height: "100%", // Let the SVG take the full height of the container
-          backgroundColor: "#fff",
+          transform: `scale(${zoom})`,
+          transformOrigin: "center",
+          minWidth: `${viewBoxWidth}px`,
+          minHeight: `${viewBoxHeight}px`,
         }}
       >
+
+        <svg
+          viewBox={`-${viewBoxWidth / 2} -${viewBoxHeight / 2} ${viewBoxWidth} ${viewBoxHeight}`}
+          width="100%"
+          height="100%"
+          preserveAspectRatio="xMidYMid meet"
+          style={{
+            display: "block",
+            backgroundColor: "#fff",
+          }}
+        >
+
         {/* arrowhead marker */}
         <defs>
           <marker
@@ -277,7 +289,7 @@ function Tonnetz() {
         })()}
   
         {/* path arrows */}
-        {path.length > 1 && path.map((id, i) => {
+        {path.length > 1 && path.map((_id, i) => {
           if (i === path.length - 1) return null;
           const fromTri = triangles.find(t => t.id === path[i]);
           const toTri = triangles.find(t => t.id === path[i + 1]);
@@ -325,8 +337,8 @@ function Tonnetz() {
         ))}
       </svg>
     </div>
+    </div>
   );
-  
 };
 
 export default Tonnetz;
