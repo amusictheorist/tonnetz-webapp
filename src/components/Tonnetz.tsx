@@ -1,66 +1,29 @@
-import { useEffect, useRef, useState, useMemo } from "react";
-import { buildTransformationMap, getTriangleVertices } from "../utils/geometry";
-import { TransformationMap, Transformation, Triangle } from "../types/types";
-import { cols, rows, sideLength, triangleHeight, pcNodes } from "../utils/constants";
+import { useRef, useState, useMemo } from "react";
+import { getTriangleVertices } from "../utils/geometry";
+import { Transformation, Triangle } from "../types/types";
+import { cols, rows, sideLength, triangleHeight, pcNodes, minZoom, maxZoom, viewBoxWidth, viewBoxHeight } from "../utils/constants";
+import '../styles/Tonnetz.css';
+import Modal from "./Modal";
+import { useZoomControl } from "../hooks/useZoomControl";
+import { useCenterScroll } from "../hooks/useCenterScroll";
+import { useTransformationMap } from "../hooks/useTransformationMap";
 
 function Tonnetz() {
   const [selectedTriangles, setSelectedTriangles] = useState<Set<string>>(new Set());
-  const [transformationMap, setTransformationMap] = useState<TransformationMap | null>(null);
-  const [highlightedTransformations, setHighlightedTransformations] = useState<
-    Record<string, { targetId: String, label: Transformation }[]>
-    >({});
+  const [highlightedTransformations, setHighlightedTransformations] = useState<Record<string, { targetId: String, label: Transformation }[]>>({});
   const [showTransformations, setShowTransformations] = useState(false);
   const [drawPath, setDrawPath] = useState(false);
   const [path, setPath] = useState<string[]>([]);
   const [initialTriad, setInitialTriad] = useState<string[] | null>(null);
   const [redoStack, setRedoStack] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const viewBoxWidth = cols * sideLength;
-  const viewBoxHeight = rows * triangleHeight + 100;
-  const minZoom = 1;
-  const maxZoom = 3;
-  const [zoom, setZoom] = useState((minZoom + maxZoom) / 2);
-  const [showModal, setShowModal] = useState(true);
-  const buttonStyle = (enabled: boolean): React.CSSProperties => ({
-    padding: "4px 8px",
-    fontSize: "12px",
-    borderRadius: "4px",
-    border: "1px solid #999",
-    backgroundColor: enabled ? "#eee" : "#ccc",
-    cursor: enabled ? "pointer" : "not-allowed"
-  });
-
-  useEffect(() => {
-    setShowModal(true);
-  }, []);
-
+  const [zoom, setZoom] = useZoomControl(containerRef);
   const handleZoom = (e: React.ChangeEvent<HTMLInputElement>) => {
     setZoom(parseFloat(e.target.value));
   };
 
-  const handleWheel = (e: WheelEvent) => {
-    if (e.ctrlKey) {
-      e.preventDefault();
-      const direction = Math.sign(e.deltaY);
-      setZoom(prev => {
-        const newZoom = Math.min(3, Math.max(0.5, prev - direction * 0.1));
-        return parseFloat(newZoom.toFixed(2));
-      });
-    }
-  };
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.scrollLeft = container.scrollWidth / 2 - container.clientWidth / 2;
-      container.scrollTop = container.scrollHeight / 2 - container.clientHeight / 2;
-      container.addEventListener('wheel', handleWheel, { passive: false });
-    }
-    return () => {
-      container?.removeEventListener('wheel', handleWheel);
-    };
-  }, []);
-
+  useCenterScroll(containerRef as React.RefObject<HTMLElement>);
+  
   const handleTriangleClick = (id: string) => {
     if (drawPath) {
       if (!path.includes(id)) {
@@ -97,9 +60,9 @@ function Tonnetz() {
       });
     }
   };
-
+  
   const isAnySelected = selectedTriangles.size > 0;
-
+  
   const triangles = useMemo(() => {
     const newTriangles: Triangle[] = [];
     for (let row = 0; row < rows; row++) {
@@ -117,52 +80,19 @@ function Tonnetz() {
     return newTriangles;
   }, []);
 
-  useEffect(() => {
-    if (triangles.length > 0) {
-      const map = buildTransformationMap(triangles);
-      setTransformationMap(map);
-    }
-  }, [triangles]);
+  const transformationMap = useTransformationMap(triangles);
+
 
   const nodes = pcNodes;
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: "100vw",
-        height: "100vh",
-        overflow: "auto",
-        backgroundColor: "#f8f8f8",
-        position: "relative"
-      }}
-    >
+    <div className="containerRef" ref={containerRef} >
+
       {/* checkboxes and slider container */}
-      <div
-        style={{
-          position: "fixed",
-          top: "100px",
-          right: "20px",
-          zIndex: 20,
-          background: "#fff",
-          padding: "4px 8px",
-          border: "1px solid #ccc",
-          borderRadius: "4px",
-          display: "flex",
-          flexDirection: "row",
-          gap: "20px",
-          fontSize: "14px",
-          alignItems: "center"
-        }}
-      >
+      <div className="checkboxes" >
+
         {/* show transformations checkbox */}
-        <label
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px"
-          }}
-        >
+        <label className="label" >
           Show Transformations
           <input
             type="checkbox"
@@ -172,9 +102,8 @@ function Tonnetz() {
         </label>
         
         {/* draw path checkbox */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-        <label
-          style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div className="label" >
+        <label className="label" >
           Draw Path
           <input
             type="checkbox"
@@ -188,9 +117,11 @@ function Tonnetz() {
             }}
             />
           </label>
+
           {drawPath && (
             <>
               <button
+                className="button"
                 disabled={path.length === 0}
                 onClick={() => {
                   const newPath = path.slice(0, -1);
@@ -198,22 +129,22 @@ function Tonnetz() {
                   setPath(newPath);
                   setRedoStack([last, ...redoStack]);
                 }}
-                style={buttonStyle(path.length > 0)}
               >
                 Undo
               </button>
               <button
+                className="button"
                 disabled={redoStack.length === 0}
                 onClick={() => {
                   const [redoItem, ...rest] = redoStack;
                   setPath([...path, redoItem]);
                   setRedoStack(rest);
                 }}
-                style={buttonStyle(redoStack.length > 0)}
               >
                 Redo
               </button>
               <button
+                className="button"
                 disabled={path.length === 0}
                 onClick={() => {
                   if (initialTriad) {
@@ -221,7 +152,6 @@ function Tonnetz() {
                     setRedoStack([]);
                   }
                 }}
-                style={buttonStyle(path.length > 0)}
               >
                 Reset
               </button>
@@ -230,14 +160,7 @@ function Tonnetz() {
         </div>
   
         {/* zoom slider */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <div className="slider" >
           <input
             type="range"
             min={minZoom}
@@ -399,55 +322,7 @@ function Tonnetz() {
       </svg>
       </div>
 
-      {showModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1000
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#fff",
-              padding: "30px",
-              borderRadius: "10px",
-              maxWidth: "500px",
-              textAlign: "left",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
-            }}
-          >
-            <h2 style={{ marginTop: 0 }}>Welcome to the amusictheorist's Transformational Tonnetz!</h2>
-            <p>Click triads to select them and check "Show Transformations" box to view Neo-Riemannian transformations P, L, R, N, S, and H on the Tonnetz.</p>
-            <p>Hold <strong>Ctrl</strong> and scroll to zoom, or use zoom slider on the right.</p>
-            <p>Draw path mode: check box to toggle mode, then select other triads to draw a transformational path on the Tonnetz.</p>
-            <p>Diagonals moving from Southwest to Northeast represent Hexatonic Cycles, or PL chains.</p>
-            <p>Diagonals moving from Northwest to Southeast represent Octatonic Cycles, or PR chains.</p>
-            <p>Horizontal movement represents movement by ascending or falling fifths through diatonic mediants, or RL chains.</p>
-            <button
-              onClick={() => setShowModal(false)}
-              style={{
-                marginTop: "20px",
-                padding: "8px 16px",
-                border: "none",
-                borderRadius: "5px",
-                backgroundColor: "#333",
-                color: "#fff",
-                cursor: "pointer"
-              }}
-            >
-              Got it!
-            </button>
-          </div>
-        </div>
-      )}
+      <Modal />
     </div>
   );
 };

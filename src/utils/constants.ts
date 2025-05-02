@@ -116,3 +116,8 @@ export const pcNodes: [number, number, string][] = [
   [4 * sideLength, -4 * triangleHeight, pitchClasses[2]],
   [5 * sideLength, -4 * triangleHeight, pitchClasses[9]],
 ];
+export const minZoom = 1;
+export const maxZoom = 3;
+export const step = 0.01;
+export const viewBoxWidth = cols * sideLength;
+export const viewBoxHeight = rows * triangleHeight + 100;
