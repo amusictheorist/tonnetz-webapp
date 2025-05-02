@@ -12,6 +12,8 @@ function Tonnetz() {
   const [showTransformations, setShowTransformations] = useState(false);
   const [drawPath, setDrawPath] = useState(false);
   const [path, setPath] = useState<string[]>([]);
+  const [initialTriad, setInitialTriad] = useState<string[] | null>(null);
+  const [redoStack, setRedoStack] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const viewBoxWidth = cols * sideLength;
   const viewBoxHeight = rows * triangleHeight + 100;
@@ -19,6 +21,14 @@ function Tonnetz() {
   const maxZoom = 3;
   const [zoom, setZoom] = useState((minZoom + maxZoom) / 2);
   const [showModal, setShowModal] = useState(true);
+  const buttonStyle = (enabled: boolean): React.CSSProperties => ({
+    padding: "4px 8px",
+    fontSize: "12px",
+    borderRadius: "4px",
+    border: "1px solid #999",
+    backgroundColor: enabled ? "#eee" : "#ccc",
+    cursor: enabled ? "pointer" : "not-allowed"
+  });
 
   useEffect(() => {
     setShowModal(true);
@@ -53,7 +63,16 @@ function Tonnetz() {
 
   const handleTriangleClick = (id: string) => {
     if (drawPath) {
-      setPath(prev => prev.includes(id) ? prev : [...prev, id]);
+      if (!path.includes(id)) {
+        setPath(prev => {
+          const newPath = [...prev, id];
+          if (prev.length === 0) {
+            setInitialTriad([id]);
+          }
+          return newPath;
+        });
+        setRedoStack([]);
+      }
     } else {
       setSelectedTriangles(prev => {
         const newSet = new Set(prev);
@@ -153,13 +172,9 @@ function Tonnetz() {
         </label>
         
         {/* draw path checkbox */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <label
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px"
-          }}
-        >
+          style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           Draw Path
           <input
             type="checkbox"
@@ -169,9 +184,50 @@ function Tonnetz() {
               setSelectedTriangles(new Set());
               setHighlightedTransformations({});
               setPath([]);
+              setRedoStack([]);
             }}
-          />
-        </label>
+            />
+          </label>
+          {drawPath && (
+            <>
+              <button
+                disabled={path.length === 0}
+                onClick={() => {
+                  const newPath = path.slice(0, -1);
+                  const last = path[path.length - 1];
+                  setPath(newPath);
+                  setRedoStack([last, ...redoStack]);
+                }}
+                style={buttonStyle(path.length > 0)}
+              >
+                Undo
+              </button>
+              <button
+                disabled={redoStack.length === 0}
+                onClick={() => {
+                  const [redoItem, ...rest] = redoStack;
+                  setPath([...path, redoItem]);
+                  setRedoStack(rest);
+                }}
+                style={buttonStyle(redoStack.length > 0)}
+              >
+                Redo
+              </button>
+              <button
+                disabled={path.length === 0}
+                onClick={() => {
+                  if (initialTriad) {
+                    setPath(initialTriad);
+                    setRedoStack([]);
+                  }
+                }}
+                style={buttonStyle(path.length > 0)}
+              >
+                Reset
+              </button>
+            </>
+          )}
+        </div>
   
         {/* zoom slider */}
         <div
