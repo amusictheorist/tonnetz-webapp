@@ -376,6 +376,56 @@ function Tonnetz() {
                 </text>
               </g>
             ))}
+
+            {/* draw path labels */}
+            {drawPath && path.length > 0 && (() => {
+              const startId = path[0];
+              const endId = path[path.length - 1];
+              const startTri = triangles.find(t => t.id === startId);
+              const endTri = triangles.find(t => t.id === endId);
+
+              const center = ([a, b, c]: [number, number][]) => [
+                (a[0] + b[0] + c[0]) / 3,
+                (a[1] + b[1] + c[1]) / 3
+              ];
+
+              return (
+                <>
+                  {startTri && (() => {
+                    const [x, y] = center(startTri.vertices);
+                    return (
+                      <text
+                        x={x}
+                        y={-y - 12}
+                        fontSize={6}
+                        fill="blue"
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        style={{ fontFamily: "sans-serif", fontWeight: "bold" }}
+                      >
+                        START
+                      </text>
+                    );
+                  })()}
+                  {endTri && endId !== startId && (() => {
+                    const [x, y] = center(endTri.vertices);
+                    return (
+                      <text
+                        x={x}
+                        y={-y - 12}
+                        fontSize={6}
+                        fill="blue"
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        style={{ fontFamily: "sans-serif", fontWeight: "bold" }}
+                      >
+                        END
+                      </text>
+                    );
+                  })()}
+                </>
+              );
+            })()}
           </svg>
         </div>
       </div>
