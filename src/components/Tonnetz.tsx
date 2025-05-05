@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { getTriangleVertices } from "../utils/geometry";
 import { Transformation, Triangle } from "../types/types";
 import { cols, rows, sideLength, triangleHeight, pcNodes, minZoom, maxZoom, viewBoxWidth, viewBoxHeight } from "../utils/constants";
@@ -35,6 +35,17 @@ function Tonnetz() {
           return newPath;
         });
         setRedoStack([]);
+
+        if (showTransformations && transformationMap?.[id]) {
+          const highlights = Object.entries(transformationMap[id]!).map(([label, targetId]) => ({
+            targetId,
+            label: label as Transformation
+          }));
+          setHighlightedTransformations(prev => ({
+            ...prev,
+            [id]: highlights
+          }));
+        }
       }
     } else {
       setSelectedTriangles(prev => {
@@ -82,6 +93,20 @@ function Tonnetz() {
 
   const transformationMap = useTransformationMap(triangles);
 
+  useEffect(() => {
+    if (showTransformations && drawPath && path.length > 0 && transformationMap) {
+      const newHighlights: Record<string, { targetId: string, label: Transformation }[]> = {};
+      path.forEach(id => {
+        if (transformationMap[id]) {
+          newHighlights[id] = Object.entries(transformationMap[id]!).map(([label, targetId]) => ({
+            targetId,
+            label: label as Transformation
+          }));
+        }
+      });
+      setHighlightedTransformations(newHighlights);
+    }
+  }, [showTransformations, drawPath, path, transformationMap]);
 
   const nodes = pcNodes;
 
@@ -97,7 +122,25 @@ function Tonnetz() {
           <input
             type="checkbox"
             checked={showTransformations}
-            onChange={(e) => setShowTransformations(e.target.checked)}
+            onChange={(e) => {
+              setShowTransformations(e.target.checked);
+              if (!e.target.checked) {
+                setHighlightedTransformations({});
+              } else {
+                if (drawPath && path.length > 0 && transformationMap) {
+                  const newHighlights: Record<string, { targetId: string, label: Transformation }[]> = {};
+                  path.forEach(id => {
+                    if (transformationMap[id]) {
+                      newHighlights[id] = Object.entries(transformationMap[id]!).map(([label, targetId]) => ({
+                        targetId,
+                        label: label as Transformation
+                      }));
+                    }
+                  });
+                  setHighlightedTransformations(newHighlights);
+                }
+              }
+            }}
           />
         </label>
         
@@ -108,13 +151,16 @@ function Tonnetz() {
           <input
             type="checkbox"
             checked={drawPath}
-            onChange={(e) => {
-              setDrawPath(e.target.checked);
-              setSelectedTriangles(new Set());
-              setHighlightedTransformations({});
-              setPath([]);
-              setRedoStack([]);
-            }}
+              onChange={(e) => {
+                const isChecked = e.target.checked;
+                setDrawPath(isChecked);
+                setSelectedTriangles(new Set());
+                if (!showTransformations) {
+                  setHighlightedTransformations({});
+                }
+                setPath([]);
+                setRedoStack([]);
+              }}
             />
           </label>
 
