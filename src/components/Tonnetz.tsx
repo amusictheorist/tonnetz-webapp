@@ -161,6 +161,9 @@ function Tonnetz() {
   
         {/* zoom slider */}
         <div className="slider" >
+          <label>
+            Zoom: {((zoom - minZoom) / (maxZoom - minZoom) * 100).toFixed(0)}%
+          </label>
           <input
             type="range"
             min={minZoom}
@@ -179,149 +182,158 @@ function Tonnetz() {
       {/* grid window */}
       <div
         style={{
-          transform: `scale(${zoom})`,
-          transformOrigin: "center",
-          minWidth: `${viewBoxWidth}px`,
-          minHeight: `${viewBoxHeight}px`,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100",
         }}
       >
-
-        <svg
-          viewBox={`-${viewBoxWidth / 2} -${viewBoxHeight / 2} ${viewBoxWidth} ${viewBoxHeight}`}
-          width="100%"
-          height="100%"
-          preserveAspectRatio="xMidYMid meet"
+        <div
           style={{
-            display: "block",
-            backgroundColor: "#fff",
+            transform: `scale(${zoom})`,
+            transformOrigin: "top left",
+            minWidth: `${viewBoxWidth}px`,
+            minHeight: `${viewBoxHeight}px`,
           }}
         >
-
-        {/* arrowhead marker */}
-        <defs>
-          <marker
-            id="arrowhead"
-            markerWidth="6"
-            markerHeight="4"
-            refX="0"
-            refY="2"
-            orient="auto"
-            markerUnits="strokeWidth"
+          <svg
+            viewBox={`-${viewBoxWidth / 2} -${viewBoxHeight / 2} ${viewBoxWidth} ${viewBoxHeight}`}
+            width={`${viewBoxWidth}px`}
+            height={`${viewBoxHeight}px`}
+            preserveAspectRatio="xMidYMid meet"
+            style={{
+              display: "block",
+              backgroundColor: "#fff",
+            }}
           >
-            <polygon points="0 0, 6 2, 0 4" fill="blue" />
-          </marker>
-        </defs>
-  
-        {/* triangle grid */}
-        {triangles.map(({ id, vertices }) => {
-          const isSelected = selectedTriangles.has(id) || path.includes(id);
-          const opacity = isAnySelected || path.length > 0 ? (isSelected ? 1 : 0.3) : 1;
-          
-          return (
-            <polygon
-              key={id}
-              points={vertices.map(([x, y]) => `${x},${-y}`).join(" ")}
-              fill="#ddd"
-              stroke="#333"
-              opacity={opacity}
-              onClick={() => handleTriangleClick(id)}
-              style={{ cursor: "pointer" }}
-            />
-          );
-        })}
-        
-        {/* transformation labels */}
-        {showTransformations && (() => {
-          const renderedTargets = new Set<string>();
-          const dedupedLabels: { targetId: string; label: Transformation }[] = [];
-          
-          for (const list of Object.values(highlightedTransformations)) {
-            for (const item of list as { targetId: string;  label: Transformation }[]) {
-              if (!renderedTargets.has(item.targetId)) {
-                renderedTargets.add(item.targetId);
-                dedupedLabels.push(item);
-              }
-            }
-          }
-          
-          return dedupedLabels.map(({ targetId, label }, idx) => {
-            const tri = triangles.find(t => t.id === targetId);
-            if (!tri) return null;
             
-            const [a, b, c] = tri.vertices;
-            const [x, y] = [
-              (a[0] + b[0] + c[0]) / 3,
-              -(a[1] + b[1] + c[1]) / 3
-            ];
-            
-            return (
-              <text
-                key={`label-${targetId}-${label}-${idx}`}
-                x={x}
-                y={y}
-                fontSize={10}
-                fill="red"
-                textAnchor="middle"
-                dominantBaseline="middle"
-                pointerEvents="none"
-                style={{ fontFamily: "sans-serif", opacity: 0.7 }}
+            {/* arrowhead marker */}
+            <defs>
+              <marker
+                id="arrowhead"
+                markerWidth="6"
+                markerHeight="4"
+                refX="0"
+                refY="2"
+                orient="auto"
+                markerUnits="strokeWidth"
               >
-                {label}
-              </text>
-            );
-          });
-        })()}
-  
-        {/* path arrows */}
-        {path.length > 1 && path.map((_id, i) => {
-          if (i === path.length - 1) return null;
-          const fromTri = triangles.find(t => t.id === path[i]);
-          const toTri = triangles.find(t => t.id === path[i + 1]);
-          if (!fromTri || !toTri) return null;
-  
-          const center = ([a, b, c]: [number, number][]) => [
-            (a[0] + b[0] + c[0]) / 3,
-            (a[1] + b[1] + c[1]) / 3
-          ];
-          const [x1, y1] = center(fromTri.vertices);
-          const [x2, y2] = center(toTri.vertices);
-          const isLast = i === path.length - 2;
-  
-          return (
-            <line
-              key={`path-${i}`}
-              x1={x1}
-              y1={-y1}
-              x2={x2}
-              y2={-y2}
-              stroke="blue"
-              strokeWidth={2}
-              markerEnd={isLast ? "url(#arrowhead)" : undefined}
-            />
-          );
-        })}
-  
-        {/* PC nodes */}
-        {nodes.map(([x, y, label], idx) => (
-          <g key={`node-${idx}`} transform={`translate(${x}, ${-y})`}>
-            <circle
-              r={12.5}
-              fill="#fff"
-              stroke="#000"
-              strokeWidth={1}
-            />
-            <text
-              y={3}
-              textAnchor="middle"
-              fontSize={8}
-            >
-              {label}
-            </text>
-          </g>
-        ))}
-      </svg>
+                <polygon points="0 0, 6 2, 0 4" fill="blue" />
+              </marker>
+            </defs>
+            
+            {/* triangle grid */}
+            {triangles.map(({ id, vertices }) => {
+              const isSelected = selectedTriangles.has(id) || path.includes(id);
+              const opacity = isAnySelected || path.length > 0 ? (isSelected ? 1 : 0.3) : 1;
+              
+              return (
+                <polygon
+                  key={id}
+                  points={vertices.map(([x, y]) => `${x},${-y}`).join(" ")}
+                  fill="#ddd"
+                  stroke="#333"
+                  opacity={opacity}
+                  onClick={() => handleTriangleClick(id)}
+                  style={{ cursor: "pointer" }}
+                />
+              );
+            })}
+            
+            {/* transformation labels */}
+            {showTransformations && (() => {
+              const renderedTargets = new Set<string>();
+              const dedupedLabels: { targetId: string; label: Transformation }[] = [];
+              
+              for (const list of Object.values(highlightedTransformations)) {
+                for (const item of list as { targetId: string; label: Transformation }[]) {
+                  if (!renderedTargets.has(item.targetId)) {
+                    renderedTargets.add(item.targetId);
+                    dedupedLabels.push(item);
+                  }
+                }
+              }
+              
+              return dedupedLabels.map(({ targetId, label }, idx) => {
+                const tri = triangles.find(t => t.id === targetId);
+                if (!tri) return null;
+                
+                const [a, b, c] = tri.vertices;
+                const [x, y] = [
+                  (a[0] + b[0] + c[0]) / 3,
+                  -(a[1] + b[1] + c[1]) / 3
+                ];
+                
+                return (
+                  <text
+                    key={`label-${targetId}-${label}-${idx}`}
+                    x={x}
+                    y={y}
+                    fontSize={10}
+                    fill="red"
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                    pointerEvents="none"
+                    style={{ fontFamily: "sans-serif", opacity: 0.7 }}
+                  >
+                    {label}
+                  </text>
+                );
+              });
+            })()}
+            
+            {/* path arrows */}
+            {path.length > 1 && path.map((_id, i) => {
+              if (i === path.length - 1) return null;
+              const fromTri = triangles.find(t => t.id === path[i]);
+              const toTri = triangles.find(t => t.id === path[i + 1]);
+              if (!fromTri || !toTri) return null;
+              
+              const center = ([a, b, c]: [number, number][]) => [
+                (a[0] + b[0] + c[0]) / 3,
+                (a[1] + b[1] + c[1]) / 3
+              ];
+              const [x1, y1] = center(fromTri.vertices);
+              const [x2, y2] = center(toTri.vertices);
+              const isLast = i === path.length - 2;
+              
+              return (
+                <line
+                  key={`path-${i}`}
+                  x1={x1}
+                  y1={-y1}
+                  x2={x2}
+                  y2={-y2}
+                  stroke="blue"
+                  strokeWidth={2}
+                  markerEnd={isLast ? "url(#arrowhead)" : undefined}
+                />
+              );
+            })}
+            
+            {/* PC nodes */}
+            {nodes.map(([x, y, label], idx) => (
+              <g key={`node-${idx}`} transform={`translate(${x}, ${-y})`}>
+                <circle
+                  r={12.5}
+                  fill="#fff"
+                  stroke="#000"
+                  strokeWidth={1}
+                />
+                <text
+                  y={3}
+                  textAnchor="middle"
+                  fontSize={8}
+                >
+                  {label}
+                </text>
+              </g>
+            ))}
+          </svg>
+        </div>
       </div>
-
+      
       <Modal />
     </div>
   );
