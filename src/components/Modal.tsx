@@ -13,9 +13,9 @@ function Modal() {
       {showModal && (
         <div className="container">
           <div className='content'>
-            <h2>Welcome to amusictheorist's Transformational Tonnetz!</h2>
+            <h2>Welcome to amusictheorist's Transformational <em>Tonnetz!</em></h2>
             <p>
-              Click triads to select them and check "Show Transformations" box to view Neo-Riemannian transformations P, L, R, N, S, and H on the Tonnetz.
+              Click triads to select them and check "Show Transformations" box to view Neo-Riemannian transformations P, L, R, N, and S on the Tonnetz.
             </p>
             <p>
               Hold <strong>Ctrl</strong> and scroll to zoom, or use zoom slider on the right.

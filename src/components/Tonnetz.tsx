@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import { useZoomControl } from "../hooks/useZoomControl";
 import { useCenterScroll } from "../hooks/useCenterScroll";
 import { useTransformationMap } from "../hooks/useTransformationMap";
+import Legend from "./Legend";
 
 function Tonnetz() {
   const [selectedTriangles, setSelectedTriangles] = useState<Set<string>>(new Set());
@@ -431,6 +432,7 @@ function Tonnetz() {
       </div>
       
       <Modal />
+      <Legend />
     </div>
   );
 };
