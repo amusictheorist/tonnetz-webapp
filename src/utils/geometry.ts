@@ -54,14 +54,12 @@ export function buildTransformationMap(triangles: Triangle[]): TransformationMap
         if (otherRow === row && otherCol === col - 1) map[triId]['R'] = other.id;
         if (otherRow === row + 1 && otherCol === col - 2) map[triId]['N'] = other.id;
         if (otherRow === row - 1 && otherCol === col) map[triId]['S'] = other.id;
-        if (otherRow === row - 1 && otherCol === col + 2) map[triId]['H'] = other.id;
       } else {
         if (otherRow === row - 1 && otherCol === col) map[triId]['P'] = other.id;
         if (otherRow === row && otherCol === col - 1) map[triId]['L'] = other.id;
         if (otherRow === row && otherCol === col + 1) map[triId]['R'] = other.id;
         if (otherRow === row - 1 && otherCol === col + 2) map[triId]['N'] = other.id;
         if (otherRow === row + 1 && otherCol === col) map[triId]['S'] = other.id;
-        if (otherRow === row + 1 && otherCol === col - 2) map[triId]['H'] = other.id;
       }
     }
   }
