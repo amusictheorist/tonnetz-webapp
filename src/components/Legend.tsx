@@ -1,4 +1,5 @@
 import { useState } from "react";
+import '../styles/Legend.css';
 
 function Legend() {
   const [showLegend, setShowLegend] = useState(false);
@@ -14,7 +15,7 @@ function Legend() {
       </button>
       
       {showLegend && (
-        <div className="content" >
+        <div className="content">
           <h3>Legend</h3>
           <p>
             The <strong>P</strong> transformation exchanges a triad for its <strong>P</strong>arallel. In a major tirad, move the third down a semitone, in a minor triad, move the third up a semitone.

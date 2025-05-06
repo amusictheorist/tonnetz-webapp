@@ -1,13 +1,14 @@
+import Legend from "./Legend";
+import Modal from "./Modal";
+import ZoomSlider from "../utils/ZoomSlider";
 import { useRef, useState, useMemo, useEffect } from "react";
 import { getTriangleVertices } from "../utils/geometry";
 import { Transformation, Triangle } from "../types/types";
-import { cols, rows, sideLength, triangleHeight, pcNodes, minZoom, maxZoom, viewBoxWidth, viewBoxHeight } from "../utils/constants";
+import { cols, rows, sideLength, triangleHeight, pcNodes, viewBoxWidth, viewBoxHeight } from "../utils/constants";
 import '../styles/Tonnetz.css';
-import Modal from "./Modal";
 import { useZoomControl } from "../hooks/useZoomControl";
 import { useCenterScroll } from "../hooks/useCenterScroll";
 import { useTransformationMap } from "../hooks/useTransformationMap";
-import Legend from "./Legend";
 
 function Tonnetz() {
   const [selectedTriangles, setSelectedTriangles] = useState<Set<string>>(new Set());
@@ -19,9 +20,6 @@ function Tonnetz() {
   const [redoStack, setRedoStack] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useZoomControl(containerRef);
-  const handleZoom = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setZoom(parseFloat(e.target.value));
-  };
 
   useCenterScroll(containerRef as React.RefObject<HTMLElement>);
   
@@ -207,23 +205,7 @@ function Tonnetz() {
         </div>
   
         {/* zoom slider */}
-        <div className="slider" >
-          <label>
-            Zoom: {((zoom - minZoom) / (maxZoom - minZoom) * 100).toFixed(0)}%
-          </label>
-          <input
-            type="range"
-            min={minZoom}
-            max={maxZoom}
-            step="0.01"
-            value={zoom}
-            onChange={handleZoom}
-            style={{
-              width: "100px",
-              height: "10px"
-            }}
-          />
-        </div>
+        <ZoomSlider zoom={zoom} setZoom={setZoom} />
       </div>
   
       {/* grid window */}

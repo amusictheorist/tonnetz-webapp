@@ -11,9 +11,14 @@ export interface Node {
   label: string;
 }
 
-export type Transformation = 'P' | 'L' | 'R' | 'N' | 'S' | 'H';
+export type Transformation = 'P' | 'L' | 'R' | 'N' | 'S';
 
 export type TransformationMap = Record<
   string,
   Partial<Record<Transformation, string>>
->;
+  >;
+
+export type ZoomSliderProps = {
+  zoom: number;
+  setZoom: (value: number) => void;
+};
