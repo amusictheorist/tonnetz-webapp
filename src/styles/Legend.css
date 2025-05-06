@@ -1,0 +1,31 @@
+.wrapper {
+  position: relative;
+  padding: 16px;
+}
+
+.button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.content {
+  position: fixed;
+  bottom: 60px;
+  left: 20px;
+  width: 350px;
+  background: #f9f9f9;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}

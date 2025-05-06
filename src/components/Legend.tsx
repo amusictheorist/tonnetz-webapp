@@ -4,40 +4,17 @@ function Legend() {
   const [showLegend, setShowLegend] = useState(false);
 
   return (
-    <div style={{ position: "relative", padding: 16 }}>
+    <div className="wrapper">
       <button
+        className="button"
         onClick={() => setShowLegend(prev => !prev)}
-        style={{
-          position: "fixed",
-          bottom: 20,
-          left: 20,
-          padding: "6px 10px",
-          fontSize: 14,
-          borderRadius: 4,
-          border: "1px solid #ccc",
-          background: "#fff",
-          cursor: "pointer",
-          boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-          zIndex: 1000
-        }}
         title={showLegend ? "Close Legend" : "Open Legend"}
         >
         ℹ️
       </button>
       
       {showLegend && (
-        <div style={{
-          position: "fixed",
-          bottom: 60,
-          left: 20,
-          width: 350,
-          background: "#f9f9f9",
-          padding: "16px",
-          border: "1px solid #ccc",
-          borderRadius: 8,
-          boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-          zIndex: 1000
-        }}>
+        <div className="content" >
           <h3>Legend</h3>
           <p>
             The <strong>P</strong> transformation exchanges a triad for its <strong>P</strong>arallel. In a major tirad, move the third down a semitone, in a minor triad, move the third up a semitone.
