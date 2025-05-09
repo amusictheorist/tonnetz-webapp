@@ -2,16 +2,22 @@ import { useEffect, useState } from "react"
 import { Triangle } from "../types/triangle"
 import { generateTriangleGrid, TRI_SIZE, TRI_HEIGHT } from "../utils/triangleGrid";
 import { useInteraction } from "../context/InteractionContext";
+import { PCNode } from "../types/pcNode";
+import { generatePCNodes } from "../utils/pcNodes";
+import { PCNodeLayer } from "./PCNodeLayer";
 
-const ROWS = 10;
-const COLS = 20;
+export const ROWS = 10;
+export const COLS = 20;
 
 export const TriangleGrid = () => {
   const [triangles, setTriangles] = useState<Triangle[]>([]);
+  const [pcNodes, setPcNodes] = useState<PCNode[]>([]);
   const { selectedIds, toggleSelection } = useInteraction();
 
   useEffect(() => {
-    setTriangles(generateTriangleGrid(ROWS, COLS));
+    const grid = generateTriangleGrid(ROWS, COLS);
+    setTriangles(grid);
+    setPcNodes(generatePCNodes(grid));
   }, []);
 
   const gridWidth = COLS * (TRI_SIZE / 2);
@@ -19,7 +25,7 @@ export const TriangleGrid = () => {
 
   return (
     <svg
-      viewBox={`${-gridWidth / 2 - 20} ${-gridHeight/ 2 - 20} ${gridWidth + 40} ${gridHeight + 40}`}
+      viewBox={`${-gridWidth / 2 - 80} ${-gridHeight/ 2 - 80} ${gridWidth + 160} ${gridHeight + 160}`}
       className="w-full h-full bg-white"
     >
       {triangles.map(tri => {
@@ -39,6 +45,8 @@ export const TriangleGrid = () => {
           />
         );
       })}
+
+      <PCNodeLayer nodes={pcNodes} />
     </svg>
   );
 };
