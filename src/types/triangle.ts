@@ -6,4 +6,5 @@ export interface Triangle {
   col: number;
   orientation: Orientation;
   points: [number, number][];
+  pitchClasses: number[];
 }

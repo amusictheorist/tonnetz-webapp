@@ -1,7 +1,7 @@
 import { PCNode } from "../types/pcNode";
 import { Triangle } from "../types/triangle";
 
-const pitchClasses = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'];
+export const pitchClasses = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'];
 
 export function generatePCNodes(triangles: Triangle[]): PCNode[] {
   const cornerMap = new Map<string, [number, number]>();
