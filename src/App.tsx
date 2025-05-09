@@ -3,15 +3,16 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Tonnetz from './components/Tonnetz';
 import './App.css';
+import { TriangleGrid } from './components/TriangleGrid';
 
 function App() {
   return (
     <Router>
       <div className="app-layout">
         <Navbar />
-        <main className="main-content">
+        <main className="h-screen w-screen overflow-hidden">
           <Routes>
-            <Route path='/' element={<Tonnetz />} />
+            <Route path='/' element={<TriangleGrid />} />
           </Routes>
         </main>
         <Footer />

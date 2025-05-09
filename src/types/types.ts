@@ -1,6 +1,6 @@
 export type Point = [number, number];
 
-export interface Triangle {
+export interface TriangleOld {
   vertices: [Point, Point, Point];
   id: string;
   selected: boolean;

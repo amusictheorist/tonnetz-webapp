@@ -3,7 +3,7 @@ import Modal from "./Modal";
 import ZoomSlider from "../utils/ZoomSlider";
 import { useRef, useState, useMemo, useEffect } from "react";
 import { getTriangleVertices } from "../utils/geometry";
-import { Transformation, Triangle } from "../types/types";
+import { Transformation, TriangleOld } from "../types/types";
 import { cols, rows, sideLength, triangleHeight, pcNodes, viewBoxWidth, viewBoxHeight } from "../utils/constants";
 import '../styles/Tonnetz.css';
 import { useZoomControl } from "../hooks/useZoomControl";
@@ -74,7 +74,7 @@ function Tonnetz() {
   const isAnySelected = selectedTriangles.size > 0;
   
   const triangles = useMemo(() => {
-    const newTriangles: Triangle[] = [];
+    const newTriangles: TriangleOld[] = [];
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         const isUp = (row + col) % 2 === 0;

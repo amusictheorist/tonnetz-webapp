@@ -1,5 +1,5 @@
 import { sideLength, triangleHeight } from "./constants";
-import { Point, Triangle, TransformationMap } from "../types/types";
+import { Point, TriangleOld, TransformationMap } from "../types/types";
 
 export function getTriangleVertices(centerX: number, centerY: number, isUp: boolean): [Point, Point, Point] {
   const s = sideLength;
@@ -20,7 +20,7 @@ export function getTriangleVertices(centerX: number, centerY: number, isUp: bool
   }
 }
 
-function isPointingUp(triangle: Triangle): boolean {
+function isPointingUp(triangle: TriangleOld): boolean {
   const [a, b, c] = triangle.vertices;
   const centroidY = (a[1] + b[1] + c[1]) / 3;
   
@@ -32,7 +32,7 @@ function isPointingUp(triangle: Triangle): boolean {
   return result;
 }
 
-export function buildTransformationMap(triangles: Triangle[]): TransformationMap {
+export function buildTransformationMap(triangles: TriangleOld[]): TransformationMap {
   const map: TransformationMap = {};
 
   for (let i = 0; i < triangles.length; i++) {

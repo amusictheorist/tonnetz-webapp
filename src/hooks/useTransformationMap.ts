@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { TransformationMap, Triangle } from "../types/types";
+import { TransformationMap, TriangleOld } from "../types/types";
 import { buildTransformationMap } from "../utils/geometry";
 
-export function useTransformationMap(triangles: Triangle[]) {
+export function useTransformationMap(triangles: TriangleOld[]) {
   const [transformationMap, setTransformationMap] = useState <TransformationMap | null > (null);
 
   useEffect(() => {
