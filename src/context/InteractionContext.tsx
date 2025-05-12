@@ -10,6 +10,7 @@ interface InteractionContextProps {
   path: string[];
   setPath: (path: string[]) => void;
   reset: () => void;
+  clearSelection: () => void;
 }
 
 const InteractionContext = createContext<InteractionContextProps | null>(null);
@@ -36,9 +37,23 @@ export const InteractionProvider = ({ children }: { children: ReactNode }) => {
     setPath([]);
   };
 
+  const clearSelection = () => {
+    setSelectedIds([]);
+  };
+
   return (
     <InteractionContext.Provider
-      value={{ mode, setMode, selectedIds, setSelectedIds, toggleSelection, path, setPath, reset }}
+      value={{
+        mode,
+        setMode,
+        selectedIds,
+        setSelectedIds,
+        toggleSelection,
+        path,
+        setPath,
+        reset,
+        clearSelection
+      }}
     >
       {children}
     </InteractionContext.Provider>

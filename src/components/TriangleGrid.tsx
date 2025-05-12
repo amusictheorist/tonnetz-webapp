@@ -17,7 +17,7 @@ export const TriangleGrid = () => {
   const [pcNodes, setPcNodes] = useState<PCNode[]>([]);
   const [transformationMap, setTransformationMap] = useState<TransformationMap>({});
   const [showTransformations, setShowTransformations] = useState(false);
-  const { selectedIds, toggleSelection } = useInteraction();
+  const { selectedIds, toggleSelection, clearSelection } = useInteraction();
 
   useEffect(() => {
     const grid = generateTriangleGrid(ROWS, COLS);
@@ -25,7 +25,6 @@ export const TriangleGrid = () => {
     setPcNodes(generatePCNodes(grid));
     const map = generateTransformationMap(grid);
     setTransformationMap(map);
-    console.log("map:", map);
   }, []);
 
   const gridWidth = COLS * (TRI_SIZE / 2);
@@ -58,6 +57,22 @@ export const TriangleGrid = () => {
             onChange={() => setShowTransformations(prev => !prev)}
           />
         </label>
+
+        {showTransformations && (
+          <button
+            onClick={clearSelection}
+            style={{
+              padding: "4px 8px",
+              fontSize: "14px",
+              backgroundColor: "#eee",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              cursor: "pointer"
+            }}
+          >
+            Clear
+          </button>
+        )}
       </div>
       
       <div className="w-full h-full">
@@ -84,9 +99,9 @@ export const TriangleGrid = () => {
             );
           })}
 
-          {showTransformations && selectedIds.length === 1 && (
+          {showTransformations && selectedIds.length  > 0 && (
             <TransformationLayer
-              selectedId={selectedIds[0]}
+              selectedIds={selectedIds}
               triangles={triangles}
               transformationMap={transformationMap}
             />
