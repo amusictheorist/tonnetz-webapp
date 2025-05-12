@@ -10,7 +10,6 @@ interface Props {
 export const TransformationLayer = ({ selectedIds, triangles, transformationMap }: Props) => {
   if (!selectedIds || selectedIds.length === 0) return null;
 
-  // Map from triangle ID to array of labels from multiple selected triangles
   const labelMap: Record<string, { label: string; from: string }[]> = {};
 
   for (const fromId of selectedIds) {
@@ -21,6 +20,23 @@ export const TransformationLayer = ({ selectedIds, triangles, transformationMap 
       }
       labelMap[toId].push({ label, from: fromId });
     }
+  }
+
+  function formatLabel(label: string, isMajor: boolean): string {
+    if (isMajor) {
+      switch (label) {
+        case "L": return "← L";
+        case "R": return "R →";
+        case "P": return "P ↑";
+      }
+    } else {
+      switch (label) {
+        case "L": return "L →";
+        case "R": return "← R";
+        case "P": return "P ↓";
+      }
+    }
+    return label;
   }
 
   return (
@@ -36,20 +52,25 @@ export const TransformationLayer = ({ selectedIds, triangles, transformationMap 
         const x = xSum / 3;
         const y = ySum / 3;
 
-        return labels.map(({ label, from }, index) => (
-          <text
-            key={`${triId}-${from}`}
-            x={x}
-            y={y + index * 12 - (labels.length - 1) * 6}
-            fontSize={10}
-            fill="red"
-            textAnchor="middle"
-            alignmentBaseline="middle"
-            style={{ fontFamily: "sans-serif", opacity: 0.7 }}
-          >
-            {label}
-          </text>
-        ));
+        return labels.map(({ label, from }, index) => {
+          const fromTri = triangles.find(t => t.id === from);
+          const isMajor = fromTri?.orientation === "up";
+
+          return (
+            <text
+              key={`${triId}-${from}-${index}`}
+              x={x}
+              y={y + index * 12 - (labels.length - 1) * 6}
+              fontSize={8}
+              fill="red"
+              textAnchor="middle"
+              alignmentBaseline="middle"
+              style={{ fontFamily: "sans-serif", opacity: 0.8 }}
+            >
+              {formatLabel(label, isMajor)}
+            </text>
+          );
+        });
       })}
     </>
   );
