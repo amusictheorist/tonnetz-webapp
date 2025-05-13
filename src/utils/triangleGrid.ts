@@ -42,3 +42,11 @@ function getTrianglePoints(
     ];
   }
 }
+
+export function getCentroid(triangle: Triangle): [number, number] {
+  const [xSum, ySum] = triangle.points.reduce(
+    ([sx, sy], [x, y]) => [sx + x, sy + y],
+    [0, 0]
+  );
+  return [xSum / 3, ySum / 3];
+}
