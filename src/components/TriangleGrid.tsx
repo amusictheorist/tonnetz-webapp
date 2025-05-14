@@ -13,31 +13,31 @@ import { HighlightAxes } from "../types/axis";
 import { AXES, groupLinesByAxis } from "../utils/createAxes";
 import { AxesLayer } from "./AxesLayer";
 
-export const ROWS = 10
-export const COLS = 20
+export const ROWS = 10;
+export const COLS = 20;
 
 export const TriangleGrid = () => {
-  const [triangles, setTriangles] = useState<Triangle[]>([])
-  const [pcNodes, setPcNodes] = useState<PCNode[]>([])
-  const [transformationMap, setTransformationMap] = useState<TransformationMap>({})
-  const [showTransformations, setShowTransformations] = useState(false)
+  const [triangles, setTriangles] = useState<Triangle[]>([]);
+  const [pcNodes, setPcNodes] = useState<PCNode[]>([]);
+  const [transformationMap, setTransformationMap] = useState<TransformationMap>({});
+  const [showTransformations, setShowTransformations] = useState(false);
   const [highlightAxes, setHighlightAxes] = useState<HighlightAxes>({
     fifths: false,
     minorThirds: false,
     majorThirds: false
   });
 
-  const { selectedIds, toggleSelection, clearSelection } = useInteraction()
+  const { selectedIds, toggleSelection, clearSelection } = useInteraction();
 
   useEffect(() => {
-    const grid = generateTriangleGrid(ROWS, COLS)
-    setTriangles(grid)
-    setPcNodes(generatePCNodes(grid))
-    setTransformationMap(generateTransformationMap(grid))
-  }, [])
+    const grid = generateTriangleGrid(ROWS, COLS);
+    setTriangles(grid);
+    setPcNodes(generatePCNodes(grid));
+    setTransformationMap(generateTransformationMap(grid));
+  }, []);
 
-  const gridWidth = COLS * (TRI_SIZE / 2)
-  const gridHeight = ROWS * TRI_HEIGHT
+  const gridWidth = COLS * (TRI_SIZE / 2);
+  const gridHeight = ROWS * TRI_HEIGHT;
 
   const { fifths, majorThirds, minorThirds } = useMemo(() => {
     return {
@@ -75,11 +75,13 @@ export const TriangleGrid = () => {
           boxShadow: "0 0 6px rgba(0, 0, 0, 0.15)",
         }}
       >
+        {/* Dropdown for axes controls */}
         <AxisDropdown
           selectedAxes={highlightAxes}
           setSelectedAxes={setHighlightAxes}
         />
 
+        {/* Show Transformations checkbox */}
         <label style={{ display: "flex", alignItems: "center", gap: "8px", padding: "4px 8px" }}>
           Show Transformations
           <input
@@ -138,7 +140,7 @@ export const TriangleGrid = () => {
           minorThirds={minorThirds}
         />
 
-        {/* Layers */}
+        {/* Transformation labels layer */}
         {showTransformations && selectedIds.length > 0 && (
           <TransformationLayer
             selectedIds={selectedIds}
@@ -146,8 +148,10 @@ export const TriangleGrid = () => {
             transformationMap={transformationMap}
           />
         )}
+
+        {/* PC node layer */}
         <PCNodeLayer nodes={pcNodes} />
       </svg>
     </div>
-  )
-}
+  );
+};
