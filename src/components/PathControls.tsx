@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useInteraction } from "../context/InteractionContext"
 
 export const PathControls = () => {
-  const { mode, setMode, path, setPath } = useInteraction();
+  const { mode, setMode, path, setPath, clearSelection } = useInteraction();
   const [redoStack, setRedoStack] = useState<string[]>([]);
 
   const isDrawing = mode === 'drawPath';
@@ -11,6 +11,10 @@ export const PathControls = () => {
     setMode(checked ? 'drawPath' : 'select');
     setPath([]);
     setRedoStack([]);
+
+    if (checked) {
+      clearSelection();
+    }
   };
 
   const handleUndo = () => {

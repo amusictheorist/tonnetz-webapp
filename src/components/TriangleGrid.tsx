@@ -83,7 +83,7 @@ export const TriangleGrid = () => {
           />
         </label>
 
-        {showTransformations && (
+        {showTransformations  && mode === 'select' && (
           <button
             onClick={clearSelection}
             style={{
@@ -151,12 +151,22 @@ export const TriangleGrid = () => {
         />
 
         {/* Transformation labels layer */}
-        {showTransformations && selectedIds.length > 0 && (
-          <TransformationLayer
-            selectedIds={selectedIds}
-            triangles={triangles}
-            transformationMap={transformationMap}
-          />
+        {showTransformations && (
+          mode === 'select'
+            ? selectedIds.length > 0 && (
+              <TransformationLayer
+              selectedIds={selectedIds}
+              triangles={triangles}
+              transformationMap={transformationMap}
+              />
+            )
+            : path.length > 0 && (
+              <TransformationLayer
+                selectedIds={[path[path.length - 1]]}
+                triangles={triangles}
+                transformationMap={transformationMap}
+              />
+            )
         )}
 
         {/* Path layer */}
