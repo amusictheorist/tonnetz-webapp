@@ -1,8 +1,12 @@
-import { Orientation, Triangle } from "../types/triangle";
+import { Orientation, Triangle } from "../types/types";
 import { assignTrianglePCs } from "./assignTrianglePitchClasses";
 
 export const TRI_SIZE = 60;
 export const TRI_HEIGHT = Math.sqrt(3) / 2 * TRI_SIZE;
+export const ROWS = 10;
+export const COLS = 20;
+export const gridWidth = COLS * (TRI_SIZE / 2);
+export const gridHeight = ROWS * TRI_HEIGHT;
 
 export function generateTriangleGrid(rows: number, cols: number): Triangle[] {
   const triangles: Triangle[] = [];

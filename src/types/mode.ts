@@ -1,1 +1,0 @@
-export type InteractionMode = 'select' | 'drawPath' | 'shortestPath';

@@ -1,11 +1,4 @@
-import { AxisLine, HighlightAxes } from "../types/axis";
-
-type AxisLinesProps = {
-  highlightAxes: HighlightAxes;
-  fifths: AxisLine[];
-  majorThirds: AxisLine[];
-  minorThirds: AxisLine[];
-};
+import { AxisLinesProps } from "../types/types";
 
 export const AxesLayer = ({ highlightAxes, fifths, majorThirds, minorThirds }: AxisLinesProps) => {
   return (

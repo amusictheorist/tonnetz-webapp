@@ -1,4 +1,4 @@
-import { PCNode } from "../types/pcNode";
+import { PCNode } from "../types/types";
 
 export const GROUP_TOLERANCE = 5;
 

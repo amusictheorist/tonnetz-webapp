@@ -1,11 +1,7 @@
 import { FC } from "react";
-import { PCNode } from "../types/pcNode"
+import { PCNodeProps } from "../types/types";
 
-type Props = {
-  nodes: PCNode[];
-};
-
-export const PCNodeLayer: FC<Props> = ({ nodes }) => {
+export const PCNodeLayer: FC<PCNodeProps> = ({ nodes }) => {
   return (
     <>
       {nodes.map(node => (

@@ -1,11 +1,6 @@
 import { useMemo } from "react";
-import { Triangle } from "../types/triangle";
+import { PathLayerProps } from "../types/types";
 import { getCentroid } from "../utils/triangleGrid";
-
-interface PathLayerProps {
-  path: string[];
-  triangles: Triangle[];
-};
 
 export const PathLayer = ({ path, triangles }: PathLayerProps) => {
   const centroidMap = useMemo(() => {

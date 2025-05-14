@@ -1,17 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import { InteractionMode } from "../types/mode";
-
-interface InteractionContextProps {
-  mode: InteractionMode;
-  setMode: (mode: InteractionMode) => void;
-  selectedIds: string[];
-  setSelectedIds: (ids: string[]) => void;
-  toggleSelection: (id: string) => void;
-  path: string[];
-  setPath: (path: string[]) => void;
-  reset: () => void;
-  clearSelection: () => void;
-}
+import { InteractionMode, InteractionContextProps } from "../types/types";
 
 const InteractionContext = createContext<InteractionContextProps | null>(null);
 

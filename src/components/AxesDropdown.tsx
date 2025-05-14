@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Axis, AxisDropdownProps } from "../types/axis";
+import { Axis, AxisDropdownProps } from "../types/types";
 
 export const AxisDropdown: React.FC<AxisDropdownProps> = ({
   selectedAxes,

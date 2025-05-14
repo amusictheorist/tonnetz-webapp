@@ -1,22 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
-import { Triangle } from "../types/triangle";
-import { generateTriangleGrid, TRI_SIZE, TRI_HEIGHT } from "../utils/triangleGrid";
+import { Triangle, PCNode, TransformationMap, HighlightAxes } from "../types/types";
+import { generateTriangleGrid, gridWidth, gridHeight, ROWS, COLS } from "../utils/triangleGrid";
 import { useInteraction } from "../context/InteractionContext";
-import { PCNode } from "../types/pcNode";
 import { generatePCNodes } from "../utils/pcNodes";
 import { PCNodeLayer } from "./PCNodeLayer";
-import { TransformationMap } from "../types/transformation";
 import { generateTransformationMap } from "../utils/transformationMap";
 import { TransformationLayer } from "./TransformationLayer";
 import { AxisDropdown } from "./AxesDropdown";
-import { HighlightAxes } from "../types/axis";
 import { AXES, groupLinesByAxis } from "../utils/createAxes";
 import { AxesLayer } from "./AxesLayer";
 import { PathControls } from "./PathControls";
 import { PathLayer } from "./PathLayer";
-
-export const ROWS = 10;
-export const COLS = 20;
 
 export const TriangleGrid = () => {
   const [triangles, setTriangles] = useState<Triangle[]>([]);
@@ -28,7 +22,6 @@ export const TriangleGrid = () => {
     minorThirds: false,
     majorThirds: false
   });
-
   const { selectedIds, toggleSelection, clearSelection, mode, path, setPath } = useInteraction();
 
   useEffect(() => {
@@ -37,9 +30,6 @@ export const TriangleGrid = () => {
     setPcNodes(generatePCNodes(grid));
     setTransformationMap(generateTransformationMap(grid));
   }, []);
-
-  const gridWidth = COLS * (TRI_SIZE / 2);
-  const gridHeight = ROWS * TRI_HEIGHT;
 
   const { fifths, majorThirds, minorThirds } = useMemo(() => {
     return {

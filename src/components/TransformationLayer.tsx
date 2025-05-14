@@ -1,13 +1,6 @@
-import { TransformationMap } from "../types/transformation";
-import { Triangle } from "../types/triangle";
+import { TransformationProps } from "../types/types";
 
-interface Props {
-  selectedIds: string[];
-  triangles: Triangle[];
-  transformationMap: TransformationMap;
-}
-
-export const TransformationLayer = ({ selectedIds, triangles, transformationMap }: Props) => {
+export const TransformationLayer = ({ selectedIds, triangles, transformationMap }: TransformationProps) => {
   if (!selectedIds || selectedIds.length === 0) return null;
 
   const labelMap: Record<string, { label: string; from: string }[]> = {};

@@ -1,5 +1,4 @@
-import { Transformation, TransformationMap } from "../types/transformation";
-import { Triangle } from "../types/triangle";
+import { Transformation, TransformationMap, Triangle } from "../types/types";
 
 export function generateTransformationMap(triangles: Triangle[]): TransformationMap {
   const map: TransformationMap = {};

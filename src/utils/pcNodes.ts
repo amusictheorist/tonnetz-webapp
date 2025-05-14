@@ -1,5 +1,4 @@
-import { PCNode } from "../types/pcNode";
-import { Triangle } from "../types/triangle";
+import { PCNode, Triangle } from "../types/types";
 
 export const pitchClasses = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'];
 

@@ -1,4 +1,4 @@
-import { Triangle } from "../types/triangle";
+import { Triangle } from "../types/types";
 
 function applyL(triad: number[]): number[] {
   return [
