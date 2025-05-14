@@ -11,6 +11,7 @@ import { TransformationLayer } from "./TransformationLayer";
 import { AxisDropdown } from "./AxesDropdown";
 import { HighlightAxes } from "../types/axis";
 import { AXES, groupLinesByAxis } from "../utils/createAxes";
+import { AxesLayer } from "./AxesLayer";
 
 export const ROWS = 10
 export const COLS = 20
@@ -130,33 +131,12 @@ export const TriangleGrid = () => {
         })}
 
         {/* Axis Lines */}
-        {highlightAxes.fifths &&
-          fifths.map((line, i) => (
-            <polyline
-              key={`fifth-${i}`}
-              points={line.map(([x, y]) => `${x},${y}`).join(" ")}
-              stroke="#333"
-              strokeWidth={3}
-            />
-          ))}
-        {highlightAxes.majorThirds &&
-          majorThirds.map((line, i) => (
-            <polyline
-              key={`maj3-${i}`}
-              points={line.map(([x, y]) => `${x},${y}`).join(" ")}
-              stroke="#333"
-              strokeWidth={3}
-            />
-          ))}
-        {highlightAxes.minorThirds &&
-          minorThirds.map((line, i) => (
-            <polyline
-              key={`min3-${i}`}
-              points={line.map(([x, y]) => `${x},${y}`).join(" ")}
-              stroke="#333"
-              strokeWidth={3}
-            />
-          ))}
+        <AxesLayer
+          highlightAxes={highlightAxes}
+          fifths={fifths}
+          majorThirds={majorThirds}
+          minorThirds={minorThirds}
+        />
 
         {/* Layers */}
         {showTransformations && selectedIds.length > 0 && (
