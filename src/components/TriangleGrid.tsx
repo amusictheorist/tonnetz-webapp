@@ -8,6 +8,8 @@ import { PCNodeLayer } from "./PCNodeLayer"
 import { TransformationMap } from "../types/transformation"
 import { generateTransformationMap } from "../utils/transformationMap"
 import { TransformationLayer } from "./TransformationLayer"
+import { AxisDropdown } from "./AxesLayer"
+import { HighlightAxes } from "../types/axis"
 
 export const ROWS = 10
 export const COLS = 20
@@ -18,11 +20,11 @@ export const TriangleGrid = () => {
   const [pcNodes, setPcNodes] = useState<PCNode[]>([])
   const [transformationMap, setTransformationMap] = useState<TransformationMap>({})
   const [showTransformations, setShowTransformations] = useState(false)
-  const [highlightAxes, setHighlightAxes] = useState({
+  const [highlightAxes, setHighlightAxes] = useState<HighlightAxes>({
     fifths: false,
     minorThirds: false,
-    majorThirds: false,
-  })
+    majorThirds: false
+  });
 
   const { selectedIds, toggleSelection, clearSelection } = useInteraction()
 
@@ -73,19 +75,6 @@ export const TriangleGrid = () => {
     }
   }, [pcNodes]);
   
-  type Axis = keyof typeof highlightAxes;
-
-  const handleAxisSelection = (axis: Axis) => {
-    setHighlightAxes((prev) => {
-      const selectedAxes = Object.keys(prev).filter(
-        (key) => prev[key as Axis])
-      if (selectedAxes.length >= 2 && !prev[axis]) {
-        return prev
-      }
-      return { ...prev, [axis]: !prev[axis] }
-    })
-  }
-
   return (
     <div
       style={{
@@ -114,15 +103,10 @@ export const TriangleGrid = () => {
           boxShadow: "0 0 6px rgba(0, 0, 0, 0.15)",
         }}
       >
-        <select
-          onChange={(e) => handleAxisSelection(e.target.value as Axis)}
-          style={{ padding: "4px 8px", fontSize: "14px" }}
-        >
-          <option value="">Select Axis</option>
-          <option value="fifths">Fifths</option>
-          <option value="minorThirds">Minor Thirds</option>
-          <option value="majorThirds">Major Thirds</option>
-        </select>
+        <AxisDropdown
+          selectedAxes={highlightAxes}
+          setSelectedAxes={setHighlightAxes}
+        />
 
         <label style={{ display: "flex", alignItems: "center", gap: "8px", padding: "4px 8px" }}>
           Show Transformations
