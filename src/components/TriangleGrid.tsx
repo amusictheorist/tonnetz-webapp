@@ -1,19 +1,19 @@
-import { useEffect, useMemo, useState } from "react"
-import { Triangle } from "../types/triangle"
-import { generateTriangleGrid, TRI_SIZE, TRI_HEIGHT } from "../utils/triangleGrid"
-import { useInteraction } from "../context/InteractionContext"
-import { PCNode } from "../types/pcNode"
-import { generatePCNodes } from "../utils/pcNodes"
-import { PCNodeLayer } from "./PCNodeLayer"
-import { TransformationMap } from "../types/transformation"
-import { generateTransformationMap } from "../utils/transformationMap"
-import { TransformationLayer } from "./TransformationLayer"
-import { AxisDropdown } from "./AxesLayer"
-import { HighlightAxes } from "../types/axis"
+import { useEffect, useMemo, useState } from "react";
+import { Triangle } from "../types/triangle";
+import { generateTriangleGrid, TRI_SIZE, TRI_HEIGHT } from "../utils/triangleGrid";
+import { useInteraction } from "../context/InteractionContext";
+import { PCNode } from "../types/pcNode";
+import { generatePCNodes } from "../utils/pcNodes";
+import { PCNodeLayer } from "./PCNodeLayer";
+import { TransformationMap } from "../types/transformation";
+import { generateTransformationMap } from "../utils/transformationMap";
+import { TransformationLayer } from "./TransformationLayer";
+import { AxisDropdown } from "./AxesDropdown";
+import { HighlightAxes } from "../types/axis";
+import { AXES, groupLinesByAxis } from "../utils/createAxes";
 
 export const ROWS = 10
 export const COLS = 20
-const GROUP_TOLERANCE = 5
 
 export const TriangleGrid = () => {
   const [triangles, setTriangles] = useState<Triangle[]>([])
@@ -38,40 +38,11 @@ export const TriangleGrid = () => {
   const gridWidth = COLS * (TRI_SIZE / 2)
   const gridHeight = ROWS * TRI_HEIGHT
 
-  const groupLinesByAxis = (
-    nodes: PCNode[],
-    axis: [number, number]
-  ): [number, number][][] => {
-    const [dx, dy] = axis
-    const len = Math.sqrt(dx * dx + dy * dy)
-    const ux = dx / len
-    const uy = dy / len
-
-    const groups: Record<string, [number, number][]> = {}
-
-    nodes.forEach(({ x, y }) => {
-      const proj = Math.round((x * ux + y * uy) / GROUP_TOLERANCE) * GROUP_TOLERANCE
-      const key = proj.toString()
-      if (!groups[key]) groups[key] = []
-      groups[key].push([x, y])
-    })
-
-    return Object.values(groups)
-      .filter(group => group.length > 1)
-      .map(group =>
-        group.sort(([x1, y1], [x2, y2]) => {
-          const p1 = x1 * ux + y1 * uy
-          const p2 = x2 * ux + y2 * uy
-          return p1 - p2
-        })
-      )
-  }
-
   const { fifths, majorThirds, minorThirds } = useMemo(() => {
     return {
-      fifths: groupLinesByAxis(pcNodes, [0, 1]),
-      majorThirds: groupLinesByAxis(pcNodes, [1.5, Math.sqrt(3) / 2]),
-      minorThirds: groupLinesByAxis(pcNodes, [-1.5, Math.sqrt(3) / 2]),
+      fifths: groupLinesByAxis(pcNodes, AXES.fifths),
+      majorThirds: groupLinesByAxis(pcNodes, AXES.majorThirds),
+      minorThirds: groupLinesByAxis(pcNodes, AXES.minorThirds)
     }
   }, [pcNodes]);
   
