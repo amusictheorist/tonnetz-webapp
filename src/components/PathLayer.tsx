@@ -19,6 +19,8 @@ export const PathLayer = ({ path, triangles }: PathLayerProps) => {
   const points = path.map(id => centroidMap[id]).filter(Boolean);
   if (points.length === 0) return null;
 
+  const isSameStartEnd = path.length > 1 && path[0] === path[path.length - 1];
+
   return (
     <>
       <polyline
@@ -44,7 +46,7 @@ export const PathLayer = ({ path, triangles }: PathLayerProps) => {
 
       <text
         x={points[0][0]}
-        y={points[0][1] - 8}
+        y={points[0][1] - 10}
         fontSize={8}
         textAnchor="middle"
         dominantBaseline="middle"
@@ -55,7 +57,7 @@ export const PathLayer = ({ path, triangles }: PathLayerProps) => {
       </text>
       <text
         x={points[points.length - 1][0]}
-        y={points[points.length - 1][1] - 8}
+        y={points[points.length - 1][1] - (isSameStartEnd ? -8 : 12)}
         fontSize={8}
         textAnchor="middle"
         dominantBaseline="middle"

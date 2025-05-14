@@ -29,7 +29,7 @@ export const TriangleGrid = () => {
     majorThirds: false
   });
 
-  const { selectedIds, toggleSelection, clearSelection, mode, path } = useInteraction();
+  const { selectedIds, toggleSelection, clearSelection, mode, path, setPath } = useInteraction();
 
   useEffect(() => {
     const grid = generateTriangleGrid(ROWS, COLS);
@@ -138,7 +138,15 @@ export const TriangleGrid = () => {
               fill="#ddd"
               stroke="#333"
               opacity={opacity}
-              onClick={() => toggleSelection(tri.id)}
+              onClick={() => {
+                if (mode === 'select') {
+                  toggleSelection(tri.id);
+                } else if (mode === 'drawPath') {
+                  if (path[path.length - 1] !== tri.id) {
+                    setPath([...path, tri.id]);
+                  }
+                }
+              }}
               style={{ cursor: "pointer" }}
             />
           )
