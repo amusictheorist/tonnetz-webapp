@@ -41,7 +41,7 @@ function getTrianglePoints(
       [cx + size / 2, cy - height / 2]
     ];
   }
-}
+};
 
 export function getCentroid(triangle: Triangle): [number, number] {
   const [xSum, ySum] = triangle.points.reduce(
@@ -49,4 +49,4 @@ export function getCentroid(triangle: Triangle): [number, number] {
     [0, 0]
   );
   return [xSum / 3, ySum / 3];
-}
+};

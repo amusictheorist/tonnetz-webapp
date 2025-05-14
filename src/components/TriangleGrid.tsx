@@ -12,6 +12,8 @@ import { AxisDropdown } from "./AxesDropdown";
 import { HighlightAxes } from "../types/axis";
 import { AXES, groupLinesByAxis } from "../utils/createAxes";
 import { AxesLayer } from "./AxesLayer";
+import { PathControls } from "./PathControls";
+import { PathLayer } from "./PathLayer";
 
 export const ROWS = 10;
 export const COLS = 20;
@@ -27,7 +29,7 @@ export const TriangleGrid = () => {
     majorThirds: false
   });
 
-  const { selectedIds, toggleSelection, clearSelection } = useInteraction();
+  const { selectedIds, toggleSelection, clearSelection, mode, path } = useInteraction();
 
   useEffect(() => {
     const grid = generateTriangleGrid(ROWS, COLS);
@@ -106,6 +108,8 @@ export const TriangleGrid = () => {
             Clear
           </button>
         )}
+
+        <PathControls />
       </div>
 
       {/* SVG Grid */}
@@ -115,8 +119,16 @@ export const TriangleGrid = () => {
       >
         {/* Base Triangles */}
         {triangles.map((tri) => {
-          const isSelected = selectedIds.includes(tri.id)
-          const isAnySelected = selectedIds.length > 0
+          const isSelectMode = mode === 'select';
+
+          const isSelected = isSelectMode
+            ? selectedIds.includes(tri.id)
+            : path.includes(tri.id);
+          
+          const isAnySelected = isSelectMode
+            ? selectedIds.length > 0
+            : path.length > 0;
+          
           const opacity = isAnySelected ? (isSelected ? 1 : 0.3) : 1
 
           return (
@@ -147,6 +159,11 @@ export const TriangleGrid = () => {
             triangles={triangles}
             transformationMap={transformationMap}
           />
+        )}
+
+        {/* Path layer */}
+        {mode === 'drawPath' && path.length > 1 && (
+          <PathLayer path={path} triangles={triangles} />
         )}
 
         {/* PC node layer */}
