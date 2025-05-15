@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useInteraction } from "../context/InteractionContext"
+import { ShortestPathControls } from "./ShortestPathControls";
 
 export const PathControls = () => {
   const { mode, setMode, path, setPath, clearSelection } = useInteraction();
   const [redoStack, setRedoStack] = useState<string[]>([]);
-
   const isDrawing = mode === 'drawPath';
+  const isShortest = mode === 'shortestPath';
 
   const handleToggle = (checked: boolean) => {
     setMode(checked ? 'drawPath' : 'select');
@@ -49,6 +50,21 @@ export const PathControls = () => {
           type="checkbox"
           checked={isDrawing}
           onChange={(e) => handleToggle(e.target.checked)}
+        />
+      </label>
+
+      <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        Shortest Path
+        <input
+          type="checkbox"
+          checked={isShortest}
+          onChange={(e) => {
+            const checked = e.target.checked;
+            setMode(checked ? 'shortestPath' : 'select');
+            setPath([]);
+            setRedoStack([]);
+            clearSelection();
+          }}
         />
       </label>
 
@@ -101,6 +117,8 @@ export const PathControls = () => {
 
         </>
       )}
+
+      <ShortestPathControls />
     </div>
   );
 };

@@ -39,6 +39,5 @@ export function generateTransformationMap(triangles: Triangle[]): Transformation
     }
   }
 
-  console.log('map:', map);
   return map;
 }
