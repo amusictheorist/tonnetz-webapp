@@ -1,4 +1,5 @@
 import { Triangle } from "../types/types";
+import { pitchClasses as PC_LABELS } from "./pcNodes";
 
 function applyL(triad: number[]): number[] {
   return [
@@ -45,8 +46,12 @@ export function assignTrianglePCs(triangles: Triangle[]): Triangle[] {
       const col = cols[i];
       const tri = grid[row][col];
       tri.pitchClasses = [...triad];
+      tri.root = triad[0];
+      tri.label = PC_LABELS[triad[0]];
+      tri.quality = tri.orientation === '+' ? 'major' : 'minor';
 
       triad = pattern[i] === 'L' ? applyL(triad) : applyR(triad);
+      console.log(`${tri.id}: ${tri.label}${tri.orientation} ${tri.pitchClasses}`);
     }
   }
 

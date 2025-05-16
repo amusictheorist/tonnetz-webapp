@@ -99,7 +99,10 @@ export const TriangleGrid = () => {
           </button>
         )}
 
-        <PathControls />
+        <PathControls
+          triangles={triangles}
+          transformationMap={transformationMap}
+        />
       </div>
 
       {/* SVG Grid */}
@@ -129,6 +132,7 @@ export const TriangleGrid = () => {
               stroke="#333"
               opacity={opacity}
               onClick={() => {
+                console.log('triangle:', tri);
                 if (mode === 'select') {
                   toggleSelection(tri.id);
                 } else if (mode === 'drawPath') {

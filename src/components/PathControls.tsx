@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { useInteraction } from "../context/InteractionContext"
 import { ShortestPathControls } from "./ShortestPathControls";
+import { TransformationMap, Triangle } from "../types/types";
 
-export const PathControls = () => {
+type PathControlProps = {
+  triangles: Triangle[];
+  transformationMap: TransformationMap;
+};
+
+export const PathControls = ({ triangles, transformationMap }: PathControlProps) => {
   const { mode, setMode, path, setPath, clearSelection } = useInteraction();
   const [redoStack, setRedoStack] = useState<string[]>([]);
   const isDrawing = mode === 'drawPath';
@@ -118,7 +124,10 @@ export const PathControls = () => {
         </>
       )}
 
-      <ShortestPathControls />
+      <ShortestPathControls
+        triangles={triangles}
+        transformationMap={transformationMap}
+      />
     </div>
   );
 };

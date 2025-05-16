@@ -38,6 +38,7 @@ export function generateTransformationMap(triangles: Triangle[]): Transformation
       }
     }
   }
+  console.log('transformation map:', map);
 
   return map;
 }

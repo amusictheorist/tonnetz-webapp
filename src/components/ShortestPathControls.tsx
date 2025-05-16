@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { pitchClasses } from "../utils/pcNodes";
 import { useInteraction } from "../context/InteractionContext";
+import { TransformationMap, Triangle } from "../types/types";
+import { findShortestPath } from "../utils/findShortestPath";
 
-export const ShortestPathControls = () => {
-  const { mode } = useInteraction();
+type ShortestPathControlsProps = {
+  triangles: Triangle[];
+  transformationMap: TransformationMap;
+};
+
+export const ShortestPathControls = ({ triangles, transformationMap }: ShortestPathControlsProps) => {
+  const { mode, setPath } = useInteraction();
   const [startTriad, setStartTriad] = useState('C');
-  const [startQuality, setStartQuality] = useState('major');
+  const [startQuality, setStartQuality] = useState<'major' | 'minor'>('major');
   const [targetTriad, setTargetTriad] = useState('G');
-  const [targetQuality, setTargetQuality] = useState('major');
+  const [targetQuality, setTargetQuality] = useState<'major' | 'minor'>('major');
   const isShortest = mode === 'shortestPath';
   const QUALITIES = ['major', 'minor'];
 
@@ -39,7 +46,24 @@ export const ShortestPathControls = () => {
 
           <button
             onClick={() => {
-              console.log('path-finding logic goes here');
+              const startRoot = pitchClasses.indexOf(startTriad);
+              const targetRoot = pitchClasses.indexOf(targetTriad);
+              const results = findShortestPath(
+                triangles,
+                transformationMap,
+                startRoot,
+                startQuality,
+                targetRoot,
+                targetQuality
+              );
+
+              if (results.length > 0) {
+                const best = results[0];
+                setPath(best.path);
+                console.log('transformations:', best.transformations);
+              } else {
+                alert('no path found');
+              }
             }}
             style={{
               padding: "6px 12px",

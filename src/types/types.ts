@@ -1,5 +1,5 @@
 export type TriangleID = string;
-export type Orientation = 'up' | 'down';
+export type Orientation = '+' | '-';
 export type Axis = 'fifths' | 'minorThirds' | 'majorThirds';
 export type AxisLine = [number, number][];
 export type HighlightAxes = Record<Axis, boolean>;
@@ -31,6 +31,9 @@ export interface Triangle {
   orientation: Orientation;
   points: [number, number][];
   pitchClasses: number[];
+  label: string;
+  quality: 'major' | 'minor';
+  root: number;
 };
 export interface AxisDropdownProps {
   selectedAxes: HighlightAxes;
