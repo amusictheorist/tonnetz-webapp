@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import './App.css';
-import { TriangleGrid } from './components/TriangleGrid';
+import { Tonnetz } from './components/Tonnetz';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Navbar />
         <main className="h-screen w-screen overflow-hidden">
           <Routes>
-            <Route path='/' element={<TriangleGrid />} />
+            <Route path='/' element={<Tonnetz />} />
           </Routes>
         </main>
         <Footer />

@@ -52,7 +52,7 @@ export const AxisDropdown: React.FC<AxisDropdownProps> = ({
             zIndex: 100
           }}
         >
-          {(['fifths', 'minorThirds', 'majorThirds'] as Axis[]).map(axis => (
+          {(['majorThirds', 'minorThirds', 'fifths'] as Axis[]).map(axis => (
             <label key={axis} style={{ display: "block", marginBottom: "4px" }}>
               <input
                 type="checkbox"

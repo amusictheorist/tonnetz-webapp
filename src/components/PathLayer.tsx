@@ -18,20 +18,6 @@ export const PathLayer = ({ path, shortestPaths = [], triangles, mode }: PathLay
 
   return (
     <>
-        {/* <defs>
-        <marker
-          id="arrowhead"
-          markerWidth="6"
-          markerHeight="4"
-          refX="0"
-          refY="2"
-          orient="auto"
-          markerUnits="strokeWidth"
-          >
-          <polygon points="0 0, 6 2, 0 4" fill="blue" />
-        </marker>
-      </defs> */}
-
       {pathsToRender.map((p, idx) => {
         const points = p.map(id => centroidMap[id]).filter(Boolean);
         if (points.length === 0) return null;

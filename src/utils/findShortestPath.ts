@@ -19,7 +19,6 @@ export function findShortestPath(
     t => t.root === startRoot && t.quality === startQuality
   );
 
-  // Pick the start triangle closest to the grid center
   const startTriangle = startTriangles.reduce((closest, tri) => {
     const dist = distanceToCenter(tri, centerX, centerY);
     return !closest || dist < closest.dist ? { tri, dist } : closest;

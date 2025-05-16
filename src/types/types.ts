@@ -49,6 +49,7 @@ export interface TransformationProps {
   selectedIds: string[];
   triangles: Triangle[];
   transformationMap: TransformationMap;
+  transformations: { from: number; to: number; label: string }[];
 };
 export interface InteractionContextProps {
   mode: InteractionMode;
