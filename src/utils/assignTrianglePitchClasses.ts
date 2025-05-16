@@ -51,7 +51,6 @@ export function assignTrianglePCs(triangles: Triangle[]): Triangle[] {
       tri.quality = tri.orientation === '+' ? 'major' : 'minor';
 
       triad = pattern[i] === 'L' ? applyL(triad) : applyR(triad);
-      console.log(`${tri.id}: ${tri.label}${tri.orientation} ${tri.pitchClasses}`);
     }
   }
 

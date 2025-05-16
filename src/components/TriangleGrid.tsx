@@ -38,7 +38,7 @@ export const TriangleGrid = () => {
       minorThirds: groupLinesByAxis(pcNodes, AXES.minorThirds)
     }
   }, [pcNodes]);
-  
+
   return (
     <div
       style={{
@@ -132,7 +132,6 @@ export const TriangleGrid = () => {
               stroke="#333"
               opacity={opacity}
               onClick={() => {
-                console.log('triangle:', tri);
                 if (mode === 'select') {
                   toggleSelection(tri.id);
                 } else if (mode === 'drawPath') {

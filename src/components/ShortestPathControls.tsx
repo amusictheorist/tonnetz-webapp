@@ -28,7 +28,7 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
               <select value={startTriad} onChange={e => setStartTriad(e.target.value)}>
                 {pitchClasses.map(pc => <option key={pc} value={pc}>{pc}</option>)}
               </select>
-              <select value={startQuality} onChange={e => setStartQuality(e.target.value)}>
+              <select value={startQuality} onChange={e => setStartQuality(e.target.value as 'major' | 'minor')}>
                 {QUALITIES.map(q => <option key={q} value={q}>{q}</option>)}
               </select>
             </div>
@@ -38,7 +38,7 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
               <select value={targetTriad} onChange={e => setTargetTriad(e.target.value)}>
                 {pitchClasses.map(pc => <option key={pc} value={pc}>{pc}</option>)}
               </select>
-              <select value={targetQuality} onChange={e => setTargetQuality(e.target.value)}>
+              <select value={targetQuality} onChange={e => setTargetQuality(e.target.value as 'major' | 'minor')}>
                 {QUALITIES.map(q => <option key={q} value={q}>{q}</option>)}
               </select>
             </div>
@@ -58,12 +58,18 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
               );
 
               if (results.length > 0) {
-                const best = results[0];
-                setPath(best.path);
-                console.log('transformations:', best.transformations);
+                // Merge all paths into a single unique list of triangle IDs
+                const allPathIds = Array.from(new Set(results.flatMap(r => r.path)));
+                setPath(allPathIds);
+              
+                results.forEach((result, idx) => {
+                  console.log(`Path ${idx + 1}:`, result.path);
+                  console.log(`Transformations ${idx + 1}:`, result.transformations);
+                });
               } else {
-                alert('no path found');
+                alert('No path found');
               }
+              
             }}
             style={{
               padding: "6px 12px",
