@@ -41,7 +41,9 @@ export interface AxisDropdownProps {
 };
 export interface PathLayerProps {
   path: string[];
+  shortestPaths?: string[][];
   triangles: Triangle[];
+  mode: InteractionMode;
 };
 export interface TransformationProps {
   selectedIds: string[];
@@ -56,6 +58,8 @@ export interface InteractionContextProps {
   toggleSelection: (id: string) => void;
   path: string[];
   setPath: (path: string[]) => void;
+  shortestPaths: string[][];
+  setShortestPaths: React.Dispatch<React.SetStateAction<string[][]>>;
   reset: () => void;
   clearSelection: () => void;
 };

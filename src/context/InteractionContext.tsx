@@ -7,6 +7,7 @@ export const InteractionProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<InteractionMode>('select');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [path, setPath] = useState<string[]>([]);
+  const [shortestPaths, setShortestPaths] = useState<string[][]>([]);
 
   const toggleSelection = (id: string) => {
     if (mode === 'select') {
@@ -39,6 +40,8 @@ export const InteractionProvider = ({ children }: { children: ReactNode }) => {
         toggleSelection,
         path,
         setPath,
+        shortestPaths,
+        setShortestPaths,
         reset,
         clearSelection
       }}

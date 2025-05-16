@@ -10,7 +10,7 @@ type ShortestPathControlsProps = {
 };
 
 export const ShortestPathControls = ({ triangles, transformationMap }: ShortestPathControlsProps) => {
-  const { mode, setPath } = useInteraction();
+  const { mode, setPath, setShortestPaths } = useInteraction();
   const [startTriad, setStartTriad] = useState('C');
   const [startQuality, setStartQuality] = useState<'major' | 'minor'>('major');
   const [targetTriad, setTargetTriad] = useState('G');
@@ -58,9 +58,8 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
               );
 
               if (results.length > 0) {
-                // Merge all paths into a single unique list of triangle IDs
-                const allPathIds = Array.from(new Set(results.flatMap(r => r.path)));
-                setPath(allPathIds);
+                setPath(results[0].path);
+                setShortestPaths(results.map(r => r.path));
               
                 results.forEach((result, idx) => {
                   console.log(`Path ${idx + 1}:`, result.path);

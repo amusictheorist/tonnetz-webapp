@@ -22,7 +22,7 @@ export const TriangleGrid = () => {
     minorThirds: false,
     majorThirds: false
   });
-  const { selectedIds, toggleSelection, clearSelection, mode, path, setPath } = useInteraction();
+  const { selectedIds, toggleSelection, clearSelection, mode, path, setPath, shortestPaths } = useInteraction();
 
   useEffect(() => {
     const grid = generateTriangleGrid(ROWS, COLS);
@@ -110,6 +110,20 @@ export const TriangleGrid = () => {
         viewBox={`${-gridWidth / 2 - 80} ${-gridHeight / 2 - 80} ${gridWidth + 160} ${gridHeight + 160}`}
         className="w-full h-full bg-white"
       >
+        <defs>
+          <marker
+            id="arrowhead"
+            markerWidth="6"
+            markerHeight="4"
+            refX="6"
+            refY="2"
+            orient="auto"
+            markerUnits="strokeWidth"
+          >
+            <polygon points="0 0, 6 2, 0 4" fill="blue" />
+          </marker>
+        </defs>
+        
         {/* Base Triangles */}
         {triangles.map((tri) => {
           const isSelectMode = mode === 'select';
@@ -135,7 +149,7 @@ export const TriangleGrid = () => {
                 if (mode === 'select') {
                   toggleSelection(tri.id);
                 } else if (mode === 'drawPath') {
-                  if (path[path.length - 1] !== tri.id) {
+                  if (path.length === 0 || path[path.length - 1] !== tri.id) {
                     setPath([...path, tri.id]);
                   }
                 }
@@ -173,8 +187,13 @@ export const TriangleGrid = () => {
         )}
 
         {/* Path layer */}
-        {mode === 'drawPath' && path.length > 1 && (
-          <PathLayer path={path} triangles={triangles} />
+        {['drawPath', 'shortestPath'].includes(mode) && path.length > 1 && (
+          <PathLayer
+            path={path}
+            shortestPaths={shortestPaths}
+            triangles={triangles}
+            mode={mode}
+          />
         )}
 
         {/* PC node layer */}
