@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Triangle, PCNode, TransformationMap, HighlightAxes } from "../types/types";
 import { generateTriangleGrid, gridWidth, gridHeight, ROWS, COLS } from "../utils/triangleGrid";
 import { useInteraction } from "../context/InteractionContext";
@@ -20,10 +20,22 @@ export const TriangleGrid = () => {
   const [highlightAxes, setHighlightAxes] = useState<HighlightAxes>({
     fifths: false,
     minorThirds: false,
-    majorThirds: false
+    majorThirds: false,
   });
-  const { selectedIds, toggleSelection, clearSelection, mode, path, setPath, shortestPaths } = useInteraction();
-  const [zoom, setZoom] = useState(1.2);
+  const {
+    selectedIds,
+    toggleSelection,
+    clearSelection,
+    mode,
+    path,
+    setPath,
+    shortestPaths,
+  } = useInteraction();
+  const minZoom = 0.5;
+  const maxZoom = 1.5;
+  const midZoom = (minZoom + maxZoom) / 2;
+  const [zoom, setZoom] = useState(midZoom);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const grid = generateTriangleGrid(ROWS, COLS);
@@ -32,22 +44,28 @@ export const TriangleGrid = () => {
     setTransformationMap(generateTransformationMap(grid));
   }, []);
 
+  useEffect(() => {
+    const node = scrollRef.current;
+    if (node) {
+      node.scrollTop = (node.scrollHeight - node.clientHeight) / 2;
+    }
+  }, []);
+
   const { fifths, majorThirds, minorThirds } = useMemo(() => {
     return {
       fifths: groupLinesByAxis(pcNodes, AXES.fifths),
       majorThirds: groupLinesByAxis(pcNodes, AXES.majorThirds),
-      minorThirds: groupLinesByAxis(pcNodes, AXES.minorThirds)
-    }
+      minorThirds: groupLinesByAxis(pcNodes, AXES.minorThirds),
+    };
   }, [pcNodes]);
 
   return (
     <div
       style={{
-        position: "absolute",
         width: "100vw",
         height: "100vh",
-        backgroundColor: "#f8f8f8",
-        overflow: "auto",
+        overflow: "hidden",
+        position: "relative",
       }}
     >
       {/* Control Panel */}
@@ -68,14 +86,19 @@ export const TriangleGrid = () => {
           boxShadow: "0 0 6px rgba(0, 0, 0, 0.15)",
         }}
       >
-        {/* Dropdown for axes controls */}
         <AxisDropdown
           selectedAxes={highlightAxes}
           setSelectedAxes={setHighlightAxes}
         />
 
-        {/* Show Transformations checkbox */}
-        <label style={{ display: "flex", alignItems: "center", gap: "8px", padding: "4px 8px" }}>
+        <label
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "4px 8px",
+          }}
+        >
           Show Transformations
           <input
             type="checkbox"
@@ -84,7 +107,7 @@ export const TriangleGrid = () => {
           />
         </label>
 
-        {showTransformations  && mode === 'select' && (
+        {showTransformations && mode === "select" && (
           <button
             onClick={clearSelection}
             style={{
@@ -105,14 +128,13 @@ export const TriangleGrid = () => {
           transformationMap={transformationMap}
         />
 
-        {/* Zoom slider */}
         <label>
-          Zoom: { }
+          Zoom: {((zoom - minZoom) / (maxZoom - minZoom) * 100).toFixed(0)}%
           <input
             style={{ width: "100px", height: "10px", cursor: "pointer" }}
             type="range"
-            min={0.7}
-            max={2}
+            min={minZoom}
+            max={maxZoom}
             step={0.01}
             value={zoom}
             onChange={(e) => setZoom(parseFloat(e.target.value))}
@@ -120,105 +142,123 @@ export const TriangleGrid = () => {
         </label>
       </div>
 
-      {/* SVG Grid */}
-      <svg
-        viewBox={`${-gridWidth / 2 - 80} ${-gridHeight / 2 - 80} ${gridWidth + 160} ${gridHeight + 160}`}
-        className="w-full h-full bg-white"
+      {/* Scrollable Container */}
+      <div
+        ref={scrollRef}
+        style={{
+          position: "absolute",
+          top: "100px",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          overflowY: "auto",
+          overflowX: "hidden",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          backgroundColor: "#fff",
+        }}
       >
-        <defs>
-          <marker
-            id="arrowhead"
-            markerWidth="6"
-            markerHeight="4"
-            refX="6"
-            refY="2"
-            orient="auto"
-            markerUnits="strokeWidth"
-          >
-            <polygon points="0 0, 6 2, 0 4" fill="blue" />
-          </marker>
-        </defs>
+        {/* SVG Grid */}
+        <svg
+        viewBox={`${-gridWidth / 2 - 80} ${-gridHeight / 2 - 80} ${gridWidth + 160} ${gridHeight + 160}`}
+        style={{ display: "block" }}
+      >
+          <defs>
+            <marker
+              id="arrowhead"
+              markerWidth="6"
+              markerHeight="4"
+              refX="6"
+              refY="2"
+              orient="auto"
+              markerUnits="strokeWidth"
+            >
+              <polygon points="0 0, 6 2, 0 4" fill="blue" />
+            </marker>
+          </defs>
 
-        <g transform={`scale(${zoom})`} style={{transformOrigin: "center"}}>
-        
-        {/* Base Triangles */}
-        {triangles.map((tri) => {
-          const isSelectMode = mode === 'select';
+          <g transform={`scale(${zoom})`}>
+            {/* Base Triangles */}
+            {triangles.map((tri) => {
+              const isSelectMode = mode === "select";
 
-          const isSelected = isSelectMode
-            ? selectedIds.includes(tri.id)
-            : mode === 'shortestPath'
-              ? shortestPaths.some(p => p.includes(tri.id))
-              : path.includes(tri.id);
-          
-          const isAnySelected = isSelectMode
-            ? selectedIds.length > 0
-            : (mode === 'shortestPath' ? shortestPaths.length > 0 : path.length > 0);
-          
-          const opacity = isAnySelected ? (isSelected ? 1 : 0.3) : 1
+              const isSelected = isSelectMode
+                ? selectedIds.includes(tri.id)
+                : mode === "shortestPath"
+                ? shortestPaths.some((p) => p.includes(tri.id))
+                : path.includes(tri.id);
 
-          return (
-            <polygon
-              key={tri.id}
-              points={tri.points.map(p => p.join(",")).join(" ")}
-              fill="#ddd"
-              stroke="#333"
-              opacity={opacity}
-              onClick={() => {
-                if (mode === 'select') {
-                  toggleSelection(tri.id);
-                } else if (mode === 'drawPath') {
-                  if (path.length === 0 || path[path.length - 1] !== tri.id) {
-                    setPath([...path, tri.id]);
-                  }
-                }
-              }}
-              style={{ cursor: "pointer" }}
+              const isAnySelected = isSelectMode
+                ? selectedIds.length > 0
+                : mode === "shortestPath"
+                ? shortestPaths.length > 0
+                : path.length > 0;
+
+              const opacity = isAnySelected ? (isSelected ? 1 : 0.3) : 1;
+
+              return (
+                <polygon
+                  key={tri.id}
+                  points={tri.points.map((p) => p.join(",")).join(" ")}
+                  fill="#ddd"
+                  stroke="#333"
+                  opacity={opacity}
+                  onClick={() => {
+                    if (mode === "select") {
+                      toggleSelection(tri.id);
+                    } else if (mode === "drawPath") {
+                      if (path.length === 0 || path[path.length - 1] !== tri.id) {
+                        setPath([...path, tri.id]);
+                      }
+                    }
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
+              );
+            })}
+
+            {/* Axis Lines */}
+            <AxesLayer
+              highlightAxes={highlightAxes}
+              fifths={fifths}
+              majorThirds={majorThirds}
+              minorThirds={minorThirds}
             />
-          )
-        })}
 
-        {/* Axis Lines */}
-        <AxesLayer
-          highlightAxes={highlightAxes}
-          fifths={fifths}
-          majorThirds={majorThirds}
-          minorThirds={minorThirds}
-        />
+            {/* Transformation labels layer */}
+            {showTransformations &&
+              (mode === "select"
+                ? selectedIds.length > 0 && (
+                    <TransformationLayer
+                      selectedIds={selectedIds}
+                      triangles={triangles}
+                      transformationMap={transformationMap}
+                    />
+                  )
+                : path.length > 0 && (
+                    <TransformationLayer
+                      selectedIds={[path[path.length - 1]]}
+                      triangles={triangles}
+                      transformationMap={transformationMap}
+                    />
+                  ))}
 
-        {/* Transformation labels layer */}
-        {showTransformations && (
-          mode === 'select'
-            ? selectedIds.length > 0 && (
-              <TransformationLayer
-              selectedIds={selectedIds}
-              triangles={triangles}
-              transformationMap={transformationMap}
-              />
-            )
-            : path.length > 0 && (
-              <TransformationLayer
-                selectedIds={[path[path.length - 1]]}
+            {/* Path layer */}
+            {["drawPath", "shortestPath"].includes(mode) && path.length > 1 && (
+              <PathLayer
+                path={path}
+                shortestPaths={shortestPaths}
                 triangles={triangles}
-                transformationMap={transformationMap}
+                mode={mode}
               />
-            )
-        )}
+            )}
 
-        {/* Path layer */}
-        {['drawPath', 'shortestPath'].includes(mode) && path.length > 1 && (
-          <PathLayer
-            path={path}
-            shortestPaths={shortestPaths}
-            triangles={triangles}
-            mode={mode}
-          />
-        )}
-
-        {/* PC node layer */}
-          <PCNodeLayer nodes={pcNodes} />
+            {/* PC node layer */}
+            <PCNodeLayer nodes={pcNodes} />
           </g>
-      </svg>
+        </svg>
+      </div>
     </div>
   );
 };
