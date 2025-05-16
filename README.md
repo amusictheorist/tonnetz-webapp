@@ -1,54 +1,58 @@
-# React + TypeScript + Vite
+# Tonnetz Webapp
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A browser-based interactive music theory tool for visualizing triadic transformations on a Tonnetz grid.
 
-Currently, two official plugins are available:
+🔗 **Live site**: [amusictheorist-tonnetz-webapp.netlify.app](https://amusictheorist-tonnetz-webapp.netlify.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🎯 What It Does
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+This web app visualizes a tiling of major and minor triads based on PLR voice-leading transformations. It supports:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- Interactive navigation on a triangular grid of chords
+- Zooming and panning
+- Selection highlighting
+- “Draw Path” mode: trace a path on the Tonnetz by selecting triangles
+- “Shortest Path” mode: visualize the most efficient PLR transformation sequence between two triads
+- Handy legend and modal info display
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🧭 How to Use
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- Click on any triangle to select a chord
+- Use the zoom slider and drag the grid to explore
+- Activate **Draw Path mode** from the controls panel to find the shortest PLR path between two chords
+- Activate **Shortest Path mode** from the controls panel to find the shortest PLR path between two chords
+- Use the legend and modal windows to understand color mappings and navigation options
+
+This tool is designed primarily for music theorists, composers, and students interested in transformational theory and the Tonnetz.
+
+---
+
+## 🔍 Technologies Used
+
+- **React + TypeScript**
+- **CSS** for UI styling
+- **Custom Canvas rendering** for efficient grid drawing
+- Hosted on **Netlify**
+
+---
+
+## 💡 Inspiration
+
+This project is inspired by transformational theory, particularly the PLR operations in neo-Riemannian theory. The triangle grid presents an infinite (wrapped) Tonnetz for exploring tonal space interactively. It is meant as an interactive approach for visualizing and researching transformations on the Tonnetz. Future implementations will allow exporting images for creating figures ad charts.
+
+---
+
+## 🙋‍♂️ Maintainer
+
+Developed by [@amusictheorist](https://github.com/amusictheorist).  
+This is a personal project — feedback or suggestions are always welcome via GitHub issues.
+
+---
+
+## 📝 License
+
+[MIT License](./LICENSE)
