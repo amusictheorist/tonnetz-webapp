@@ -10,7 +10,7 @@ export const PCNodeLayer: FC<PCNodeProps> = ({ nodes }) => {
           <text
             x={node.x}
             y={node.y + 3}
-            fontSize={8}
+            fontSize={7}
             textAnchor="middle"
           >
             {node.label}

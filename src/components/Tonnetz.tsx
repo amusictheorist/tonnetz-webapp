@@ -33,8 +33,8 @@ export const Tonnetz = () => {
     setPath,
     shortestPaths,
   } = useInteraction();
-  const minZoom = 0.5;
-  const maxZoom = 1.5;
+  const minZoom = 1;
+  const maxZoom = 3;
   const midZoom = (minZoom + maxZoom) / 2;
   const [zoom, setZoom] = useState(midZoom);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -60,6 +60,8 @@ export const Tonnetz = () => {
       minorThirds: groupLinesByAxis(pcNodes, AXES.minorThirds),
     };
   }, [pcNodes]);
+  const extraMargin = 80 / zoom;
+  const scaledViewBox = `${-gridWidth / 2 - extraMargin} ${-gridHeight / 2 - extraMargin} ${gridWidth + extraMargin * 2} ${gridHeight + extraMargin * 2}`;
 
   return (
     <div
@@ -163,9 +165,10 @@ export const Tonnetz = () => {
       >
         {/* SVG Grid */}
         <svg
-        viewBox={`${-gridWidth / 2 - 80} ${-gridHeight / 2 - 80} ${gridWidth + 160} ${gridHeight + 160}`}
-        style={{ display: "block" }}
-      >
+          viewBox={scaledViewBox}
+          style={{ display: "block", width: "100%", height: "100%" }}
+        >
+
           <defs>
             <marker
               id="arrowhead"

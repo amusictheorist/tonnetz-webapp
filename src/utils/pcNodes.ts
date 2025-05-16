@@ -1,6 +1,6 @@
 import { PCNode, Triangle } from "../types/types";
 
-export const pitchClasses = ['C', 'C#/Db', 'D', 'D#/Eb', 'E', 'F', 'F#/Gb', 'G', 'G#/Ab', 'A', 'A#/Bb', 'B'];
+export const pitchClasses = ['C', 'C♯/D♭', 'D', 'D♯/E♭', 'E', 'F', 'F♯/G♭', 'G', 'G♯/A♭', 'A', 'A♯/B♭', 'B'];
 
 export function generatePCNodes(triangles: Triangle[]): PCNode[] {
   const cornerMap = new Map<string, [number, number]>();
