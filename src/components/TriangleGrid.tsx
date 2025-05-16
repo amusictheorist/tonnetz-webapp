@@ -130,11 +130,13 @@ export const TriangleGrid = () => {
 
           const isSelected = isSelectMode
             ? selectedIds.includes(tri.id)
-            : path.includes(tri.id);
+            : mode === 'shortestPath'
+              ? shortestPaths.some(p => p.includes(tri.id))
+              : path.includes(tri.id);
           
           const isAnySelected = isSelectMode
             ? selectedIds.length > 0
-            : path.length > 0;
+            : (mode === 'shortestPath' ? shortestPaths.length > 0 : path.length > 0);
           
           const opacity = isAnySelected ? (isSelected ? 1 : 0.3) : 1
 
