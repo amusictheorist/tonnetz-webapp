@@ -23,6 +23,7 @@ export const TriangleGrid = () => {
     majorThirds: false
   });
   const { selectedIds, toggleSelection, clearSelection, mode, path, setPath, shortestPaths } = useInteraction();
+  const [zoom, setZoom] = useState(1.2);
 
   useEffect(() => {
     const grid = generateTriangleGrid(ROWS, COLS);
@@ -52,7 +53,7 @@ export const TriangleGrid = () => {
       {/* Control Panel */}
       <div
         style={{
-          position: "absolute",
+          position: "fixed",
           top: "100px",
           right: "20px",
           zIndex: 20,
@@ -103,6 +104,20 @@ export const TriangleGrid = () => {
           triangles={triangles}
           transformationMap={transformationMap}
         />
+
+        {/* Zoom slider */}
+        <label>
+          Zoom: { }
+          <input
+            style={{ width: "100px", height: "10px", cursor: "pointer" }}
+            type="range"
+            min={0.7}
+            max={2}
+            step={0.01}
+            value={zoom}
+            onChange={(e) => setZoom(parseFloat(e.target.value))}
+          />
+        </label>
       </div>
 
       {/* SVG Grid */}
@@ -123,6 +138,8 @@ export const TriangleGrid = () => {
             <polygon points="0 0, 6 2, 0 4" fill="blue" />
           </marker>
         </defs>
+
+        <g transform={`scale(${zoom})`} style={{transformOrigin: "center"}}>
         
         {/* Base Triangles */}
         {triangles.map((tri) => {
@@ -199,7 +216,8 @@ export const TriangleGrid = () => {
         )}
 
         {/* PC node layer */}
-        <PCNodeLayer nodes={pcNodes} />
+          <PCNodeLayer nodes={pcNodes} />
+          </g>
       </svg>
     </div>
   );

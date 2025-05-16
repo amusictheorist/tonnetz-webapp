@@ -47,7 +47,7 @@ export const TransformationLayer = ({ selectedIds, triangles, transformationMap 
 
         return labels.map(({ label, from }, index) => {
           const fromTri = triangles.find(t => t.id === from);
-          const isMajor = fromTri?.orientation === "up";
+          const isMajor = fromTri?.orientation === "+";
 
           return (
             <text

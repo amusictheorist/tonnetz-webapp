@@ -60,11 +60,6 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
               if (results.length > 0) {
                 setPath(results[0].path);
                 setShortestPaths(results.map(r => r.path));
-              
-                results.forEach((result, idx) => {
-                  console.log(`Path ${idx + 1}:`, result.path);
-                  console.log(`Transformations ${idx + 1}:`, result.transformations);
-                });
               } else {
                 alert('No path found');
               }
