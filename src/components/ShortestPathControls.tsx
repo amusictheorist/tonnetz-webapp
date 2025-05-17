@@ -1,13 +1,8 @@
 import { useState } from "react";
 import { pitchClasses } from "../utils/pcNodes";
 import { useInteraction } from "../context/InteractionContext";
-import { TransformationMap, Triangle } from "../types/types";
+import { ShortestPathControlsProps } from "../types/types";
 import { findShortestPath } from "../utils/findShortestPath";
-
-type ShortestPathControlsProps = {
-  triangles: Triangle[];
-  transformationMap: TransformationMap;
-};
 
 export const ShortestPathControls = ({ triangles, transformationMap }: ShortestPathControlsProps) => {
   const { mode, setPath, setShortestPaths } = useInteraction();

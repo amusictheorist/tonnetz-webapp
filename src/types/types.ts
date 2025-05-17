@@ -23,7 +23,6 @@ export type TransformationMap = {
     [toId: string]: Transformation;
   };
 };
-
 export interface Triangle {
   id: TriangleID;
   row: number;
@@ -63,4 +62,37 @@ export interface InteractionContextProps {
   setShortestPaths: React.Dispatch<React.SetStateAction<string[][]>>;
   reset: () => void;
   clearSelection: () => void;
+  zoom: number;
+  setZoom: (zoom: number) => void;
+};
+export type ControlPanelProps = {
+  highlighAxes: HighlightAxes;
+  setHighlightAxes: React.Dispatch<React.SetStateAction<HighlightAxes>>;
+  showTransformations: boolean;
+  setShowTransformations: React.Dispatch<React.SetStateAction<boolean>>;
+  clearSelection: () => void;
+  mode: string;
+  triangles: Triangle[];
+  transformationMap: TransformationMap;
+};
+export type TriangleProps = {
+  id: string;
+  points: [number, number][];
+  isSelected: boolean;
+  opacity: number;
+  onClick: () => void;
+};
+export type ZoomProps = {
+  zoom: number;
+  setZoom: (value: number) => void;
+  minZoom?: number;
+  maxZoom?: number;
+};
+export type PathControlProps = {
+  triangles: Triangle[];
+  transformationMap: TransformationMap;
+};
+export type ShortestPathControlsProps = {
+  triangles: Triangle[];
+  transformationMap: TransformationMap;
 };

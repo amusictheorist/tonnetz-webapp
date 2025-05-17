@@ -2,12 +2,16 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { InteractionMode, InteractionContextProps } from "../types/types";
 
 const InteractionContext = createContext<InteractionContextProps | null>(null);
+const minZoom = 1;
+const maxZoom = 3
+const midZoom = (minZoom + maxZoom) / 2;
 
 export const InteractionProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<InteractionMode>('select');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [path, setPath] = useState<string[]>([]);
   const [shortestPaths, setShortestPaths] = useState<string[][]>([]);
+  const [zoom, setZoom] = useState(midZoom);
 
   const toggleSelection = (id: string) => {
     if (mode === 'select') {
@@ -43,7 +47,9 @@ export const InteractionProvider = ({ children }: { children: ReactNode }) => {
         shortestPaths,
         setShortestPaths,
         reset,
-        clearSelection
+        clearSelection,
+        zoom,
+        setZoom
       }}
     >
       {children}
