@@ -2,9 +2,9 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import { InteractionMode, InteractionContextProps } from "../types/types";
 
 const InteractionContext = createContext<InteractionContextProps | null>(null);
-const minZoom = 1;
-const maxZoom = 3
-const midZoom = (minZoom + maxZoom) / 2;
+export const minZoom = 1;
+export const maxZoom = 2.5;
+export const midZoom = (minZoom + maxZoom) / 2;
 
 export const InteractionProvider = ({ children }: { children: ReactNode }) => {
   const [mode, setMode] = useState<InteractionMode>('select');

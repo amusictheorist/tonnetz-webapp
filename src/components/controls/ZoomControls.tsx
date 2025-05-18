@@ -1,12 +1,6 @@
-import { useInteraction } from "../../context/InteractionContext";
+import { maxZoom, minZoom, useInteraction } from "../../context/InteractionContext";
 
-export const ZoomSlider = ({
-  minZoom = 1,
-  maxZoom = 3
-}: {
-  minZoom?: number;
-  maxZoom?: number;
-}) => {
+export const ZoomSlider = () => {
   const { zoom, setZoom } = useInteraction();
   const percent = ((zoom - minZoom) / (maxZoom - minZoom)) * 100;
 
