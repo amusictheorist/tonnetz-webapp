@@ -3,6 +3,7 @@ import { pitchClasses } from "../utils/pcNodes";
 import { useInteraction } from "../context/InteractionContext";
 import { ShortestPathControlsProps } from "../types/types";
 import { findShortestPath } from "../utils/findShortestPath";
+import '../styles/ShortestPathControls.css';
 
 export const ShortestPathControls = ({ triangles, transformationMap }: ShortestPathControlsProps) => {
   const { mode, setPath, setShortestPaths } = useInteraction();
@@ -16,8 +17,8 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
   return (
     <>
       {isShortest && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px" }}>
-          <div style={{ display: "flex", gap: "12px" }}>
+        <div className="shortest-path" >
+          <div className="checkboxes" >
             <div>
               <label>Start Triad</label><br />
               <select value={startTriad} onChange={e => setStartTriad(e.target.value)}>
@@ -40,6 +41,7 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
           </div>
 
           <button
+            className="button"
             onClick={() => {
               const startRoot = pitchClasses.indexOf(startTriad);
               const targetRoot = pitchClasses.indexOf(targetTriad);
@@ -59,15 +61,6 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
                 alert('No path found');
               }
               
-            }}
-            style={{
-              padding: "6px 12px",
-              fontSize: "14px",
-              borderRadius: "4px",
-              border: "1px solid #ccc",
-              backgroundColor: "#f0f0f0",
-              cursor: "pointer",
-              marginTop: "4px"
             }}
           >
             Find Shortest Path

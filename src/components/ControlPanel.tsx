@@ -1,7 +1,8 @@
 import { ControlPanelProps } from "../types/types";
-import { AxisDropdown } from "./AxesDropdown"
-import { PathControls } from "./PathControls"
+import { AxisDropdown } from "./AxesDropdown";
+import { PathControls } from "./PathControls";
 import { ZoomSlider } from "./ZoomControls";
+import '../styles/ControlPanel.css';
 
 export const ControlPanel = ({
   highlighAxes,
@@ -15,36 +16,13 @@ export const ControlPanel = ({
 }: ControlPanelProps) => {
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: "100px",
-        right: "20px",
-        zIndex: 20,
-        background: "#fff",
-        padding: "4px 8px",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-        display: "flex",
-        gap: "8px",
-        fontSize: "14px",
-        alignItems: "center",
-        boxShadow: "0 0 6px rgba(0,0,0,0.15)"
-      }}
-    >
+    <div className="controls" >
       <AxisDropdown
         selectedAxes={highlighAxes}
         setSelectedAxes={setHighlightAxes}
       />
 
-      <label
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          padding: "4px 8px"
-        }}
-      >
+      <label className="control-label" >
         Show Transformations
         <input
           type="checkbox"
@@ -54,17 +32,7 @@ export const ControlPanel = ({
       </label>
 
       {showTransformations && mode === 'select' && (
-        <button
-          onClick={clearSelection}
-          style={{
-            padding: "4px 8px",
-            fontSize: "14px",
-            backgroundColor: "#eee",
-            border: "1px solid #ddd",
-            borderRadius: "4px",
-            cursor: "pointer"
-          }}
-        >
+        <button className="control-button" onClick={clearSelection} >
           Clear
         </button>
       )}

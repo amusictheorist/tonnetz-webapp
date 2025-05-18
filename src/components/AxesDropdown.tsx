@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Axis, AxisDropdownProps } from "../types/types";
+import '../styles/AxesDropdown.css';
+
+const AXIS_OPTIONS: { label: string; value: Axis }[] = [
+  { label: 'Major Thirds', value: 'majorThirds' },
+  { label: 'Minor Thirds', value: 'minorThirds' },
+  { label: 'Fifths', value: 'fifths' }
+];
 
 export const AxisDropdown: React.FC<AxisDropdownProps> = ({
   selectedAxes,
@@ -35,35 +42,24 @@ export const AxisDropdown: React.FC<AxisDropdownProps> = ({
   }, []);
 
   return (
-    <div style={{ position: 'relative' }} ref={dropdownRef}>
-      <button onClick={() => setOpen(prev => !prev)} style={{ padding: "4px 8px" }}>
+    <div className="dropdown" ref={dropdownRef}>
+      <button className="dropdown-button" onClick={() => setOpen(prev => !prev)} >
       Highlight Axes ▾
       </button>
       {open && (
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            backgroundColor: "#fff",
-            border: "1px solid #ccc",
-            borderRadius: "4px",
-            boxShadow: "0 2px 6px rgba(0,0,0,02)",
-            padding: "8px",
-            zIndex: 100
-          }}
-        >
-          {(['majorThirds', 'minorThirds', 'fifths'] as Axis[]).map(axis => (
-            <label key={axis} style={{ display: "block", marginBottom: "4px" }}>
+        <div className="dropdown-items" >
+          {AXIS_OPTIONS.map(({ label, value }) => (
+            <label className="dropdown-label" key={value} >
               <input
                 type="checkbox"
-                checked={selectedAxes[axis]}
-                onChange={() => toggleAxis(axis)}
+                checked={selectedAxes[value]}
+                onChange={() => toggleAxis(value)}
                 disabled={
-                  !selectedAxes[axis] &&
+                  !selectedAxes[value] &&
                   Object.values(selectedAxes).filter(Boolean).length >= 2
-              }
+                }
               />
-              {' ' + axis}
+              {' ' + label}
             </label>
           ))}
         </div>

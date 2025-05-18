@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useInteraction } from "../context/InteractionContext"
 import { ShortestPathControls } from "./ShortestPathControls";
 import { PathControlProps } from "../types/types";
+import '../styles/PathControls.css';
 
 export const PathControls = ({ triangles, transformationMap }: PathControlProps) => {
   const { mode, setMode, path, setPath, clearSelection } = useInteraction();
@@ -44,8 +45,8 @@ export const PathControls = ({ triangles, transformationMap }: PathControlProps)
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+    <div className="path-checkbox" >
+      <label className="path-label" >
         Draw Path
         <input
           type="checkbox"
@@ -54,7 +55,7 @@ export const PathControls = ({ triangles, transformationMap }: PathControlProps)
         />
       </label>
 
-      <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <label className="path-label" >
         Shortest Path
         <input
           type="checkbox"
@@ -71,51 +72,17 @@ export const PathControls = ({ triangles, transformationMap }: PathControlProps)
 
       {isDrawing && (
         <>
-          <button
-            style={{
-              padding: "4px 8px",
-              fontSize: "12px",
-              borderRadius: "4px",
-              border: "1px solid #999",
-              backgroundColor: "#eee",
-              cursor: "pointer"
-            }}
-            disabled={path.length === 0}
-            onClick={handleUndo}
-          >
+          <button className="path-button" onClick={handleUndo} >
             Undo
           </button>
           
-          <button
-            style={{
-              padding: "4px 8px",
-              fontSize: "12px",
-              borderRadius: "4px",
-              border: "1px solid #999",
-              backgroundColor: "#eee",
-              cursor: "pointer"
-            }}
-            disabled={path.length === 0}
-            onClick={handleRedo}
-          >
+          <button className="path-button" onClick={handleRedo} >
             Redo
           </button>
           
-          <button
-            style={{
-              padding: "4px 8px",
-              fontSize: "12px",
-              borderRadius: "4px",
-              border: "1px solid #999",
-              backgroundColor: "#eee",
-              cursor: "pointer"
-            }}
-            disabled={path.length === 0}
-            onClick={handleReset}
-          >
+          <button className="path-button" onClick={handleReset} >
             Reset
           </button>
-
         </>
       )}
 
