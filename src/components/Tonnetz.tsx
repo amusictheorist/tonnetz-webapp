@@ -68,6 +68,7 @@ export const Tonnetz = () => {
         mode={mode}
         triangles={triangles}
         transformationMap={transformationMap}
+        disableTransformations={mode === 'shortestPath'}
       />
 
       <div className="svg-container" ref={scrollRef} >

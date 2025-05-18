@@ -21,6 +21,11 @@
   padding: 4px 8px;
 }
 
+.input {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .control.button {
   padding: 4px 8px;
   font-size: 14px;

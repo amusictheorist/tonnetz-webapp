@@ -74,6 +74,7 @@ export type ControlPanelProps = {
   mode: string;
   triangles: Triangle[];
   transformationMap: TransformationMap;
+  disableTransformations?: boolean;
 };
 export type TriangleProps = {
   id: string;

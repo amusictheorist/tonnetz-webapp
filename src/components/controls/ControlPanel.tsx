@@ -12,7 +12,8 @@ export const ControlPanel = ({
   clearSelection,
   mode,
   triangles,
-  transformationMap
+  transformationMap,
+  disableTransformations
 }: ControlPanelProps) => {
 
   return (
@@ -28,6 +29,7 @@ export const ControlPanel = ({
           type="checkbox"
           checked={showTransformations}
           onChange={() => setShowTransformations((prev) => !prev)}
+          disabled={disableTransformations}
         />
       </label>
 
