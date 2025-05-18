@@ -1,6 +1,7 @@
 import { ControlPanelProps } from "../../types/types";
 import { AxisDropdown } from "./AxesDropdown";
 import { PathControls } from "./PathControls";
+import { ExportButton } from "./ExportButton";
 import { ZoomSlider } from "./ZoomControls";
 import '../../styles/ControlPanel.css';
 
@@ -13,7 +14,9 @@ export const ControlPanel = ({
   mode,
   triangles,
   transformationMap,
-  disableTransformations
+  disableTransformations,
+  svgRef,
+  zoom
 }: ControlPanelProps) => {
 
   return (
@@ -45,6 +48,7 @@ export const ControlPanel = ({
       />
 
       <ZoomSlider />
+      <ExportButton svgRef={svgRef} filename="tonnetz.png" zoom={zoom} />
     </div>
   );
 };

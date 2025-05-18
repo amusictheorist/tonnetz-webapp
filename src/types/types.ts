@@ -75,6 +75,8 @@ export type ControlPanelProps = {
   triangles: Triangle[];
   transformationMap: TransformationMap;
   disableTransformations?: boolean;
+  svgRef: React.RefObject<SVGSVGElement | null>;
+  zoom: number;
 };
 export type TriangleProps = {
   id: string;

@@ -34,6 +34,7 @@ export const Tonnetz = () => {
     zoom,
   } = useInteraction();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const { triangles, pcNodes, transformationMap } = useGenerateTonnetzData();
   const scaledViewBox = useMemo(() => calculateViewBox(zoom, gridWidth, gridHeight), [zoom]);
 
@@ -46,6 +47,7 @@ export const Tonnetz = () => {
       minorThirds: groupLinesByAxis(pcNodes, AXES.minorThirds),
     };
   }, [pcNodes]);
+
 
   const handleClick = (id: string) => () => {
     if (mode === 'select') {
@@ -69,10 +71,12 @@ export const Tonnetz = () => {
         triangles={triangles}
         transformationMap={transformationMap}
         disableTransformations={mode === 'shortestPath'}
+        svgRef={svgRef}
+        zoom={zoom}
       />
-
+      
       <div className="svg-container" ref={scrollRef} >
-        <svg className="svg" viewBox={scaledViewBox} >
+        <svg className="svg" viewBox={scaledViewBox} ref={svgRef}>
 
           <defs>
             <marker
