@@ -83,7 +83,7 @@ export const Tonnetz = () => {
               id="arrowhead"
               markerWidth="6"
               markerHeight="4"
-              refX="6"
+              refX="5"
               refY="2"
               orient="auto"
               markerUnits="strokeWidth"

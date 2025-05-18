@@ -9,7 +9,7 @@ export const AxesLayer = ({ highlightAxes, fifths, majorThirds, minorThirds }: A
             key={`fifth-${i}`}
             points={line.map(([x, y]) => `${x},${y}`).join(" ")}
             stroke="#333"
-            strokeWidth={3}
+            strokeWidth={2.5}
           />
         ))}
       {highlightAxes.majorThirds &&
@@ -18,7 +18,7 @@ export const AxesLayer = ({ highlightAxes, fifths, majorThirds, minorThirds }: A
             key={`maj3-${i}`}
             points={line.map(([x, y]) => `${x},${y}`).join(" ")}
             stroke="#333"
-            strokeWidth={3}
+            strokeWidth={2.5}
           />
         ))}
       {highlightAxes.minorThirds &&
@@ -27,7 +27,7 @@ export const AxesLayer = ({ highlightAxes, fifths, majorThirds, minorThirds }: A
             key={`min3-${i}`}
             points={line.map(([x, y]) => `${x},${y}`).join(" ")}
             stroke="#333"
-            strokeWidth={3}
+            strokeWidth={2.5}
           />
         ))}
     </>
