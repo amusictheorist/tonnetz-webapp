@@ -1,4 +1,7 @@
 import { useState } from "react";
+import PImage from '../assets/PImage.png';
+import LImage from '../assets/LImage.png';
+import RImage from '../assets/RImage.png';
 import '../styles/Legend.css';
 
 function Legend() {
@@ -20,12 +23,15 @@ function Legend() {
           <p>
             The <strong>P</strong> transformation exchanges a triad for its <strong>P</strong>arallel. In a major tirad, move the third down a semitone, in a minor triad, move the third up a semitone.
           </p>
+          <img src={PImage} alt="P transformation" className="legend-img-vertical" />
           <p>
             The <strong>L</strong> transformation (<em>Leittonwechsel</em>) is known as the <strong>L</strong>eading-Tone Exchange. In a major triad, move the root down a semitone, in a minor triad, move the fifth up a semitone.
           </p>
+          <img src={LImage} alt="L transformation" className="legend-img-horizontal" />
           <p>
             The <strong>R</strong> transformation exchanges a triad for its <strong>R</strong>elative. In a major triad, move the fifth up a whole tone, in a minor triad, move the root down a  whole tone.
           </p>
+          <img src={RImage} alt="R transformation" className="legend-img-horizontal" />
           {/* <p>
             The <strong>N</strong> transformation (<em>Nebenverwandt</em>) exchanges a major triad for its minor subdominant and a minor triad for its major dominant. This trandformation can be obtained by applying <strong>R</strong>, <strong>L</strong>, and <strong>P</strong> successively.
           </p>

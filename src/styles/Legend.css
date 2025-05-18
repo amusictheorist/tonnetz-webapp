@@ -29,3 +29,23 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   z-index: 1000;
 }
+
+.legend-img-horizontal {
+  width: auto;
+  max-width: 150px;
+  height: auto;
+  display: block;
+  margin: 8px auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.legend-img-vertical {
+  width: auto;
+  max-width: 100px;
+  height: auto;
+  display: block;
+  margin: 8px auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
