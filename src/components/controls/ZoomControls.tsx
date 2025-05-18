@@ -1,4 +1,4 @@
-import { useInteraction } from "../context/InteractionContext";
+import { useInteraction } from "../../context/InteractionContext";
 
 export const ZoomSlider = ({
   minZoom = 1,

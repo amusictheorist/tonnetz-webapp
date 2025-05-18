@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { PathLayerProps } from "../types/types";
-import { getCentroid } from "../utils/triangleGrid";
+import { PathLayerProps } from "../../types/types";
+import { getCentroid } from "../../utils/triangleGrid";
 
 export const PathLayer = ({ path, shortestPaths = [], triangles, mode }: PathLayerProps) => {
   const centroidMap = useMemo(() => {

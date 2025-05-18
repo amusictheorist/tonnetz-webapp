@@ -1,4 +1,4 @@
-import { TransformationProps } from "../types/types";
+import { TransformationProps } from "../../types/types";
 
 export const TransformationLayer = ({ selectedIds, triangles, transformationMap }: TransformationProps) => {
   if (!selectedIds || selectedIds.length === 0) return null;

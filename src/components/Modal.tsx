@@ -32,7 +32,7 @@ function Modal() {
             <p>
               Horizontal movement represents movement by ascending or falling fifths through diatonic mediants, or <strong>RL</strong> chains. These can be highlighted by checking "fifths" in the axis dropdown.
             </p>
-            <button className='button' onClick={() => setShowModal(false)} >
+            <button className='modal-button' onClick={() => setShowModal(false)} >
               Got it!
             </button>
           </div>

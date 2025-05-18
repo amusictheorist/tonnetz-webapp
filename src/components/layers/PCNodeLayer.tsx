@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { PCNodeProps } from "../types/types";
+import { PCNodeProps } from "../../types/types";
 
 export const PCNodeLayer: FC<PCNodeProps> = ({ nodes }) => {
   return (

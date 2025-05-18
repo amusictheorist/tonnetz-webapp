@@ -1,19 +1,19 @@
 import Modal from "./Modal";
 import Legend from "./Legend";
 import { useMemo, useRef, useState } from "react";
+import { useInteraction } from "../context/InteractionContext";
 import { HighlightAxes } from "../types/types";
 import { gridWidth, gridHeight } from "../utils/triangleGrid";
-import { useInteraction } from "../context/InteractionContext";
-import { PCNodeLayer } from "./PCNodeLayer";
-import { TransformationLayer } from "./TransformationLayer";
 import { AXES, groupLinesByAxis } from "../utils/createAxes";
-import { AxesLayer } from "./AxesLayer";
-import { PathLayer } from "./PathLayer";
+import { calculateViewBox } from "../utils/viewBox";
+import { PCNodeLayer } from "./layers/PCNodeLayer";
+import { TransformationLayer } from "./layers/TransformationLayer";
+import { AxesLayer } from "./layers/AxesLayer";
+import { PathLayer } from "./layers/PathLayer";
+import { TrianglePolygons } from "./layers/TriangleLayer";
+import { ControlPanel } from "./controls/ControlPanel";
 import { useGenerateTonnetzData } from "../hooks/useGenerateTonnetzData";
 import { useScrollToCenter } from "../hooks/useScrollToCenter";
-import { calculateViewBox } from "../utils/viewBox";
-import { ControlPanel } from "./ControlPanel";
-import { TrianglePolygons } from "./TriangleLayer";
 import '../styles/Tonnetz.css';
 
 export const Tonnetz = () => {

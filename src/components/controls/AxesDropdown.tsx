@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Axis, AxisDropdownProps } from "../types/types";
-import '../styles/AxesDropdown.css';
+import { Axis, AxisDropdownProps } from "../../types/types";
+import '../../styles/AxesDropdown.css';
 
 const AXIS_OPTIONS: { label: string; value: Axis }[] = [
   { label: 'Major Thirds', value: 'majorThirds' },

@@ -1,8 +1,8 @@
-import { ControlPanelProps } from "../types/types";
+import { ControlPanelProps } from "../../types/types";
 import { AxisDropdown } from "./AxesDropdown";
 import { PathControls } from "./PathControls";
 import { ZoomSlider } from "./ZoomControls";
-import '../styles/ControlPanel.css';
+import '../../styles/ControlPanel.css';
 
 export const ControlPanel = ({
   highlighAxes,

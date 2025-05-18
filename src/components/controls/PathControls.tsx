@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useInteraction } from "../context/InteractionContext"
+import { useInteraction } from "../../context/InteractionContext";
 import { ShortestPathControls } from "./ShortestPathControls";
-import { PathControlProps } from "../types/types";
-import '../styles/PathControls.css';
+import { PathControlProps } from "../../types/types";
+import '../../styles/PathControls.css';
 
 export const PathControls = ({ triangles, transformationMap }: PathControlProps) => {
   const { mode, setMode, path, setPath, clearSelection } = useInteraction();

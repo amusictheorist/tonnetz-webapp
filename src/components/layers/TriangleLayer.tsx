@@ -1,4 +1,4 @@
-import { TriangleProps } from "../types/types";
+import { TriangleProps } from "../../types/types";
 
 export const TrianglePolygons = ({ id, points, opacity, onClick }: TriangleProps) => {
   return (
