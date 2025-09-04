@@ -1,15 +1,7 @@
-import { useState } from "react";
-import '../styles/Navbar.css';
-
 function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   return (
-    <nav className="navbar">
-      <h2 className="logo">Neo-Riemannian Tonnetz Transformations</h2>
-      <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-      ☰
-      </button>
+    <nav className="fixed top-0 w-full z-10 bg-neutral-700 text-white flex justify-between items-center p-1">
+      <h2 className="text-sm font-bold pl-2">Neo-Riemannian Tonnetz Transformations</h2>
     </nav>
   )
 }

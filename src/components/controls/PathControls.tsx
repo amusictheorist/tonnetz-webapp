@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useInteraction } from "../../context/InteractionContext";
 import { ShortestPathControls } from "./ShortestPathControls";
 import { PathControlProps } from "../../types/types";
-import '../../styles/PathControls.css';
 
 export const PathControls = ({ triangles, transformationMap }: PathControlProps) => {
   const { mode, setMode, path, setPath, clearSelection } = useInteraction();
@@ -45,17 +44,18 @@ export const PathControls = ({ triangles, transformationMap }: PathControlProps)
   };
 
   return (
-    <div className="path-checkbox" >
-      <label className="path-label" >
+    <div className="flex items-center gap-2">
+      <label className="flex items-center gap-2">
         Draw Path
         <input
           type="checkbox"
           checked={isDrawing}
           onChange={(e) => handleToggle(e.target.checked)}
-        />
+          className="cursor-pointer"
+          />
       </label>
 
-      <label className="path-label" >
+      <label className="flex items-center gap-2">
         Shortest Path
         <input
           type="checkbox"
@@ -67,20 +67,29 @@ export const PathControls = ({ triangles, transformationMap }: PathControlProps)
             setRedoStack([]);
             clearSelection();
           }}
+          className="cursor-pointer"
         />
       </label>
 
       {isDrawing && (
         <>
-          <button className="path-button" onClick={handleUndo} >
+          <button
+            onClick={handleUndo}
+            className="px-2 py-1 text-xs border border-gray-400 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Undo
           </button>
           
-          <button className="path-button" onClick={handleRedo} >
+          <button
+            onClick={handleRedo}
+            className="px-2 py-1 text-xs border border-gray-400 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Redo
           </button>
           
-          <button className="path-button" onClick={handleReset} >
+          <button onClick={handleReset}
+            className="px-2 py-1 text-xs border border-gray-400 rounded bg-gray-200 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Reset
           </button>
         </>

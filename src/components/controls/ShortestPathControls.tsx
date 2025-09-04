@@ -3,7 +3,6 @@ import { pitchClasses } from "../../utils/pcNodes";
 import { useInteraction } from "../../context/InteractionContext";
 import { ShortestPathControlsProps } from "../../types/types";
 import { findShortestPath } from "../../utils/findShortestPath";
-import '../../styles/ShortestPathControls.css';
 
 export const ShortestPathControls = ({ triangles, transformationMap }: ShortestPathControlsProps) => {
   const { mode, setPath, setShortestPaths } = useInteraction();
@@ -17,31 +16,65 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
   return (
     <>
       {isShortest && (
-        <div className="shortest-path" >
-          <div className="checkboxes" >
-            <div>
-              <label>Start Triad</label><br />
-              <select value={startTriad} onChange={e => setStartTriad(e.target.value)}>
-                {pitchClasses.map(pc => <option key={pc} value={pc}>{pc}</option>)}
+        <div className="flex flex-col gap-2 mt-2">
+          <div className="flex gap-3">
+            <div className="flex flex-col">
+              <label className="mb-1">Start Triad</label><br />
+              <select
+                value={startTriad}
+                onChange={e => setStartTriad(e.target.value)}
+                className="border border-gray-300 rounded px-2 py-1"
+              >
+                {pitchClasses.map(pc => (
+                  <option key={pc} value={pc}>
+                    {pc}
+                  </option>
+                ))}
               </select>
-              <select value={startQuality} onChange={e => setStartQuality(e.target.value as 'major' | 'minor')}>
-                {QUALITIES.map(q => <option key={q} value={q}>{q}</option>)}
+
+              <select
+                value={startQuality}
+                onChange={e => setStartQuality(e.target.value as 'major' | 'minor')}
+                className="border border-gray-300 rounded px-2 py-1"
+              >
+                {QUALITIES.map(q => (
+                  <option key={q} value={q}>
+                    {q}
+                  </option>
+                ))}
               </select>
             </div>
 
-            <div>
-              <label>Target Triad</label><br />
-              <select value={targetTriad} onChange={e => setTargetTriad(e.target.value)}>
-                {pitchClasses.map(pc => <option key={pc} value={pc}>{pc}</option>)}
+            <div className="flex flex-col">
+              <label className="mb-1">Target Triad</label><br />
+              <select
+                value={targetTriad}
+                onChange={e => setTargetTriad(e.target.value)}
+                className="border border-gray-300 rounded px-2 py-1"
+              >
+                {pitchClasses.map(pc => (
+                  <option key={pc} value={pc}>
+                    {pc}
+                  </option>
+                ))}
               </select>
-              <select value={targetQuality} onChange={e => setTargetQuality(e.target.value as 'major' | 'minor')}>
-                {QUALITIES.map(q => <option key={q} value={q}>{q}</option>)}
+
+              <select
+                value={targetQuality}
+                onChange={e => setTargetQuality(e.target.value as 'major' | 'minor')}
+                className="border border-gray-300 rounded px-2 py-1"
+              >
+                {QUALITIES.map(q => (
+                  <option key={q} value={q}>
+                    {q}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
           <button
-            className="button"
+            
             onClick={() => {
               const startRoot = pitchClasses.indexOf(startTriad);
               const targetRoot = pitchClasses.indexOf(targetTriad);
@@ -60,8 +93,8 @@ export const ShortestPathControls = ({ triangles, transformationMap }: ShortestP
               } else {
                 alert('No path found');
               }
-              
             }}
+            className="mt-1 px-3 py-1 text-sm border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 cursor-pointer"
           >
             Find Shortest Path
           </button>
