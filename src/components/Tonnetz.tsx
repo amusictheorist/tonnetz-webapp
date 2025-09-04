@@ -109,7 +109,7 @@ export const Tonnetz = () => {
                 : path.length > 0;
 
               const opacity = isAnySelected ? (isSelected ? 1 : 0.3) : 1;
-
+              
               return (
                 <TrianglePolygons
                   key={tri.id}
@@ -121,7 +121,7 @@ export const Tonnetz = () => {
                 />
               );
             })}
-
+            
             <AxesLayer
               highlightAxes={highlightAxes}
               fifths={fifths}
@@ -131,21 +131,21 @@ export const Tonnetz = () => {
 
             {showTransformations &&
               (mode === "select"
-                ? selectedIds.length > 0 && (
-                    <TransformationLayer
+              ? selectedIds.length > 0 && (
+                <TransformationLayer
                   selectedIds={selectedIds}
                   triangles={triangles}
                   transformationMap={transformationMap} transformations={[]}
                 />
-                  )
-                : path.length > 0 && (
-                    <TransformationLayer
+              )
+              : path.length > 0 && (
+                <TransformationLayer
                   selectedIds={[path[path.length - 1]]}
                   triangles={triangles}
                   transformationMap={transformationMap} transformations={[]}
-                />
-                  ))}
-
+                  />
+                ))}
+            
             {["drawPath", "shortestPath"].includes(mode) && path.length > 1 && (
               <PathLayer
                 path={path}
