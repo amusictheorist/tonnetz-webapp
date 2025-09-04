@@ -8,8 +8,8 @@ interface ExportButtonProps {
 
 export const ExportButton: React.FC<ExportButtonProps> = ({
   svgRef,
-  filename = 'tonnetz.png',
-  zoom = 1
+  filename = "tonnetz.png",
+  zoom = 1,
 }) => {
   const handleClick = () => {
     if (svgRef.current) {
@@ -18,7 +18,10 @@ export const ExportButton: React.FC<ExportButtonProps> = ({
   };
 
   return (
-    <button onClick={handleClick} style={{ margin: "10px" }}>
+    <button
+      onClick={handleClick}
+      className="m-2 px-3 py-1 text-sm font-medium rounded border border-gray-300 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+    >
       Export Image
     </button>
   );

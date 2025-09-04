@@ -14,7 +14,6 @@ import { TrianglePolygons } from "./layers/TriangleLayer";
 import { ControlPanel } from "./controls/ControlPanel";
 import { useGenerateTonnetzData } from "../hooks/useGenerateTonnetzData";
 import { useScrollToCenter } from "../hooks/useScrollToCenter";
-import '../styles/Tonnetz.css';
 
 export const Tonnetz = () => {
   const [showTransformations, setShowTransformations] = useState(false);
@@ -60,7 +59,7 @@ export const Tonnetz = () => {
   };
 
   return (
-    <div className="main" >
+    <div className="w-screen h-screen relative overflow-hidden">
       <ControlPanel
         highlighAxes={highlightAxes}
         setHighlightAxes={setHighlightAxes}
@@ -75,8 +74,11 @@ export const Tonnetz = () => {
         zoom={zoom}
       />
       
-      <div className="svg-container" ref={scrollRef} >
-        <svg className="svg" viewBox={scaledViewBox} ref={svgRef}>
+      <div
+        className="absolute top-[100px] bottom-0 left-0 right-0 overflow-y-auto overflow-x-hidden flex justify-center items-start bg-white"
+        ref={scrollRef}
+      >
+        <svg className="block w-full h-full" viewBox={scaledViewBox} ref={svgRef}>
 
           <defs>
             <marker
