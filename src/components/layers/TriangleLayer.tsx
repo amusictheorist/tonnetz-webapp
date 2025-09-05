@@ -1,6 +1,7 @@
 import { TriangleProps } from "../../types/types";
 
 export const TrianglePolygons = ({ id, points, opacity, onClick }: TriangleProps) => {
+  // console.log(id, points);
   return (
     <polygon
       key={id}
@@ -11,5 +12,6 @@ export const TrianglePolygons = ({ id, points, opacity, onClick }: TriangleProps
       onClick={onClick}
       style={{ cursor: "pointer" }}
     />
+
   );
 };
