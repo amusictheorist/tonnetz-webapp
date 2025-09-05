@@ -1,4 +1,4 @@
-import { PCNode } from "../types/types";
+import { Axis, PCNode } from "../types/types";
 
 export const GROUP_TOLERANCE = 5;
 
@@ -35,4 +35,21 @@ export const AXES: Record<string, [number, number]> = {
   fifths: [0, 1],
   majorThirds: [1.5, Math.sqrt(3) / 2],
   minorThirds: [-1.5, Math.sqrt(3) / 2]
+};
+
+export const toggleAxisSelection = (
+  prev: Record<Axis, boolean>,
+  axis: Axis
+): Record<Axis, boolean> => {
+  const currentlySelected = Object.keys(prev).filter(
+    (k) => prev[k as Axis]
+  ) as Axis[];
+
+  if (currentlySelected.includes(axis)) {
+    return { ...prev, [axis]: false };
+  } else if (currentlySelected.length < 2) {
+    return { ...prev, [axis]: true };
+  } else {
+    return prev;
+  }
 };
